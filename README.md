@@ -1,4 +1,4 @@
-We-ll-Dae-It-Later--GP2-Coursework-
-===================================
+gp2
+===
 
-Pure Buff Coursework
+The base code for the Games Programming 2 module

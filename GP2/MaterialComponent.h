@@ -54,10 +54,39 @@ public:
 	};
 
 	void loadDiffuseTexture(const string& filename);
+	void loadSpecularTexture(const string& filename);
+	void loadBumpmapTexture(const string& filename);
+	void loadParallaxTexture(const string& filename);
 
 	void setTextures()
 	{
 		m_pDiffuseTextureVariable->SetResource(m_pDiffuseTexture);
+
+		if(m_pDiffuseTexture != NULL)
+		{
+			m_pUseDiffuseTextureVariable->SetBool(TRUE);
+		}
+
+		m_pSpecularTextureVariable->SetResource(m_pSpecularTexture);
+
+		if(m_pSpecularTexture != NULL)
+		{
+			m_pUseSpecularTextureVariable->SetBool(TRUE);
+		}
+
+		m_pBumpmapTextureVariable->SetResource(m_pBumpmapTexture);
+
+		if(m_pBumpmapTexture != NULL)
+		{
+			m_pUseBumpmapTextureVariable->SetBool(TRUE);
+		}
+
+		m_pParallaxTextureVariable->SetResource(m_pParallaxTexture);
+
+		if(m_pParallaxTexture != NULL)
+		{
+			m_pUseParallaxTextureVariable->SetBool(TRUE);
+		}
 	};
 	//set the world matrix
 	void setWorldMatrix(float * pMatrix)
@@ -79,12 +108,72 @@ public:
 
 	void setAmbientLightColour(D3DXCOLOR& colour);
 
+	void setAmbientMaterialColour(D3DXCOLOR& colour)
+	{
+		m_AmbientMaterial=colour;
+	}
+
+	void setDiffuseMaterialColour(D3DXCOLOR& colour)
+	{
+		m_DiffuseMaterial=colour;
+	}
+
+	void setSpecularMaterialColour(D3DXCOLOR& colour)
+	{
+		m_SpecularMaterial=colour;
+	}
+
+	void setSpecularPower(float power)
+	{
+		m_SpecularPower=power;
+	}
+	
+	void setParallaxScale(float scale)
+	{
+		m_ParallaxScale=scale;
+	}
+
+	void setParallaxBias(float bias)
+	{
+		m_ParallaxBias=bias;
+	}
+	
 	//bind the vertex layout
 	void bindVertexLayout()
 	{
 		m_pD3D10Device->IASetInputLayout(m_pVertexLayout);
 	};
 
+	void setMaterial()
+	{
+		m_pAmbientMaterialVariable->SetFloatVector((float*)m_AmbientMaterial);
+		m_pDiffuseMaterialVariable->SetFloatVector((float*)m_DiffuseMaterial);
+		m_pSpecularMaterialVariable->SetFloatVector((float*)m_SpecularMaterial);
+		m_pSpecularPowerVariable->SetFloat(m_SpecularPower);
+		m_pParallaxScaleVariable->SetFloat(m_ParallaxScale);
+		m_pParallaxBiasVariable->SetFloat(m_ParallaxBias);
+		
+	};
+
+	void setLightDirection(D3DXVECTOR3& lightDir)
+	{
+		m_pLightDirectionVariable->SetFloatVector((float*)lightDir);
+	};
+
+	void setDiffuseLightColour(D3DXCOLOR& colour)
+	{
+		m_pDiffuseLightColourVariable->SetFloatVector((float*)&colour);
+	};
+
+	void setSpecularLightColour(D3DXCOLOR& colour)
+	{
+		m_pSpecularLightColourVariable->SetFloatVector((float*)&colour);
+	};
+
+	void setCameraPosition(D3DXVECTOR3& pos)
+	{
+		m_pCameraPositionVariable->SetFloatVector((float*)&pos);
+	};
 
 protected:
 	//effect variables
@@ -106,14 +195,50 @@ protected:
 	ID3D10EffectMatrixVariable * m_pViewMatrixVariable;
 	ID3D10EffectMatrixVariable * m_pProjectionMatrixVariable;
 	ID3D10EffectMatrixVariable * m_pWorldMatrixVariable;
+	//Textures
 	ID3D10EffectShaderResourceVariable *m_pDiffuseTextureVariable;
+	ID3D10EffectShaderResourceVariable *m_pSpecularTextureVariable;
+	ID3D10EffectShaderResourceVariable *m_pBumpmapTextureVariable;
+	ID3D10EffectShaderResourceVariable *m_pParallaxTextureVariable;
+	//Light
+	ID3D10EffectVectorVariable *m_pAmbientLightColourVariable;
+	ID3D10EffectVectorVariable *m_pDiffuseLightColourVariable;
+	ID3D10EffectVectorVariable *m_pSpecularLightColourVariable;
+	//Direction
+	ID3D10EffectVectorVariable *m_pLightDirectionVariable;
+	//Material
+	ID3D10EffectVectorVariable *m_pAmbientMaterialVariable;
+	ID3D10EffectVectorVariable *m_pDiffuseMaterialVariable;
+	ID3D10EffectVectorVariable *m_pSpecularMaterialVariable;
+	ID3D10EffectScalarVariable *m_pSpecularPowerVariable;
+	ID3D10EffectScalarVariable *m_pParallaxScaleVariable;
+	ID3D10EffectScalarVariable *m_pParallaxBiasVariable;
+	
 
-	//Colour variables
-	ID3D10EffectVectorVariable *m_pAmbientColourVariable;
+	//Camera
+	ID3D10EffectVectorVariable *m_pCameraPositionVariable;
 
-	//Color
-	D3DXCOLOR m_AmbientColour;
+	//Material colours
+	D3DXCOLOR m_AmbientMaterial;
+	D3DXCOLOR m_DiffuseMaterial;
+	D3DXCOLOR m_SpecularMaterial;
+	float m_SpecularPower;
+	float m_ParallaxScale;
+	float m_ParallaxBias;
 
 	//Textures
 	ID3D10ShaderResourceView *m_pDiffuseTexture;
+	ID3D10EffectScalarVariable *m_pUseDiffuseTextureVariable;
+
+	ID3D10ShaderResourceView *m_pSpecularTexture;
+	ID3D10EffectScalarVariable *m_pUseSpecularTextureVariable;
+
+	ID3D10ShaderResourceView *m_pBumpmapTexture;
+	ID3D10EffectScalarVariable *m_pUseBumpmapTextureVariable;
+
+	ID3D10ShaderResourceView *m_pParallaxTexture;
+	ID3D10EffectScalarVariable *m_pUseParallaxTextureVariable;
+
+
+
 };

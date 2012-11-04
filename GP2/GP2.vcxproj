@@ -78,15 +78,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="DirectionalLightComponent.cpp" />
     <ClCompile Include="GameApplication.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="GeometryComponent.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Joypad.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="LightComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -96,14 +100,19 @@
     <ClInclude Include="..\..\..\..\Desktop\GlasgowCaley-gp2-b1132ac\GP2\GameObject.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="DefaultEffect.h" />
+    <ClInclude Include="DirectionLightComponent.h" />
     <ClInclude Include="GameApplication.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="GeometryComponent.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Joypad.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="LightComponent.h" />
     <ClInclude Include="MaterialComponent.h" />
+    <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Timer.h" />
@@ -112,9 +121,15 @@
     <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ambient.fx" />
+    <None Include="Bumpmapping.fx" />
+    <None Include="diffuse.fx" />
+    <None Include="DirectionalLight.fx" />
+    <None Include="Parallax.fx" />
     <None Include="ScreenSpace.fx">
       <DeploymentContent>false</DeploymentContent>
     </None>
+    <None Include="Specular.fx" />
     <None Include="Texture.fx" />
     <None Include="Transform.fx" />
   </ItemGroup>
