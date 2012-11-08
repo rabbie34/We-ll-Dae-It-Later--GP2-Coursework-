@@ -66,9 +66,9 @@ bool CGameApplication::initGame()
 	//Create Game Object
 	CGameObject *pTestGameObject=new CGameObject();
 	//Set the name
-	pTestGameObject->setName("Test");
+	pTestGameObject->setName("Car");
 	//Position
-	pTestGameObject->getTransform()->setPosition(0.0f,-2.0f,5.0f);
+	pTestGameObject->getTransform()->setPosition(0.0f,-2.5f,5.0f);
 	//create material
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
@@ -90,21 +90,26 @@ bool CGameApplication::initGame()
 	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-	//Creating second game object
-	/*pTestGameObject = new CGameObject();
-	pTestGameObject->setName("Test2");
-	pTestGameObject->getTransform()->setPosition(0.0f,-4.0f,10.0f);
-	pTestGameObject->getTransform()->setRotation(0.0f,10.0f,0.0f);
-	pMaterial=new CMaterialComponent();
+	pTestGameObject= new CGameObject();
+	pTestGameObject->setName("Tank");
+	pTestGameObject->getTransform()->setPosition(0.0f,-8.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(0.5f,0.5f,0.5f);
+	pTestGameObject->getTransform()->setRotation(80.0f,0.0f,0.0f);
+	pMaterial=new CMaterialComponent;
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
-	pMaterial->setEffectFilename("DirectionalLight.fx");
+	pMaterial->setEffectFilename("Parallax.fx");
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
+	pMaterial->setSpecularMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
+	pMaterial->setSpecularPower(0.8f);
+	pMaterial->loadDiffuseTexture("sand.jpg");
+	pMaterial->loadSpecularTexture("sandSpec.jpg");
 	pTestGameObject->addComponent(pMaterial);
-
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"Tank1.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"desert.fbx");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	//add the game object
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+
 
 	CGameObject *pCameraGameObject=new CGameObject();
 	pCameraGameObject->getTransform()->setPosition(0.0f,0.0f,-5.0f);
@@ -233,25 +238,25 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime(),0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime()*-1,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime(),0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
 	}
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
@@ -419,7 +424,7 @@ bool CGameApplication::initGraphics()
 bool CGameApplication::initWindow()
 {
 	m_pWindow=new CWin32Window();
-	if (!m_pWindow->init(TEXT("Games Programming"),800,640,false))
+	if (!m_pWindow->init(TEXT("Games Programming"),800,800,false))
 		return false;
 	return true;
 }
