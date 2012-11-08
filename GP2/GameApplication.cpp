@@ -90,6 +90,7 @@ bool CGameApplication::initGame()
 	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
+	//Bring back in when we have the mesh for desert
 	/*
 	pTestGameObject= new CGameObject();
 	pTestGameObject->setName("Tank");
