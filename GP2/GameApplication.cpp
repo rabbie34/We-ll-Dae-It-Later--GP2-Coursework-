@@ -90,6 +90,7 @@ bool CGameApplication::initGame()
 	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
+	/*
 	pTestGameObject= new CGameObject();
 	pTestGameObject->setName("Tank");
 	pTestGameObject->getTransform()->setPosition(0.0f,-8.0f,0.0f);
@@ -108,7 +109,7 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	//add the game object
-	m_pGameObjectManager->addGameObject(pTestGameObject);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
 
 	CGameObject *pCameraGameObject=new CGameObject();
