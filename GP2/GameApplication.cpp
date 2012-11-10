@@ -68,7 +68,7 @@ bool CGameApplication::initGame()
 	//Set the name
 	pTestGameObject->setName("Car");
 	//Position
-	pTestGameObject->getTransform()->setPosition(0.0f,-2.5f,5.0f);
+	pTestGameObject->getTransform()->setPosition(10.0f,-2.5f,5.0f);
 	//create material
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
@@ -90,31 +90,28 @@ bool CGameApplication::initGame()
 	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-	//Bring back in when we have the mesh for desert
-	/*
+	
 	pTestGameObject= new CGameObject();
-	pTestGameObject->setName("Tank");
-	pTestGameObject->getTransform()->setPosition(0.0f,-8.0f,0.0f);
-	pTestGameObject->getTransform()->setScale(0.5f,0.5f,0.5f);
-	pTestGameObject->getTransform()->setRotation(80.0f,0.0f,0.0f);
+	pTestGameObject->setName("Plane");
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,10.0f);
+	pTestGameObject->getTransform()->setScale(0.04f,0.04f,0.04f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,-1.58f);
 	pMaterial=new CMaterialComponent;
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
-	pMaterial->setSpecularMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
-	pMaterial->setSpecularPower(0.8f);
-	pMaterial->loadDiffuseTexture("sand.jpg");
-	pMaterial->loadSpecularTexture("sandSpec.jpg");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"desert.fbx");
+	pMaterial->loadDiffuseTexture("mat_ship.bmp");
+	pMaterial->loadBumpmapTexture("mat_shipNORMAL.bmp");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"spaceship01.fbx");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	//add the game object
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 
 	CGameObject *pCameraGameObject=new CGameObject();
-	pCameraGameObject->getTransform()->setPosition(0.0f,0.0f,-5.0f);
+	pCameraGameObject->getTransform()->setPosition(0.0f,4.5f,-4.0f);
 	pCameraGameObject->setName("Camera");
 
 	D3D10_VIEWPORT vp;
@@ -123,7 +120,7 @@ bool CGameApplication::initGame()
 
 	CCameraComponent *pCamera=new CCameraComponent();
 	pCamera->setUp(0.0f,1.0f,0.0f);
-	pCamera->setLookAt(0.0f,0.0f,0.0f);
+	pCamera->setLookAt(0.0f,0.0f,10.0f);
 	pCamera->setFOV(D3DX_PI*0.25f);
 	pCamera->setAspectRatio((float)(vp.Width/vp.Height));
 	pCamera->setFarClip(1000.0f);
@@ -240,25 +237,25 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime(),0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime()*-1,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime(),0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Car")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
 	}
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
