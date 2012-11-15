@@ -5,6 +5,21 @@
 #include "Input.h"
 #include "Keyboard.h"
 
+	 
+// we're not using any product apart from Havok Physics.
+#undef HK_FEATURE_PRODUCT_AI
+#undef HK_FEATURE_PRODUCT_ANIMATION
+#undef HK_FEATURE_PRODUCT_CLOTH
+#undef HK_FEATURE_PRODUCT_DESTRUCTION
+#undef HK_FEATURE_PRODUCT_BEHAVIOR
+ 
+// Also we're not using any serialization/versioning so we don't need any of these.
+#define HK_EXCLUDE_FEATURE_SerializeDeprecatedPre700
+#define HK_EXCLUDE_FEATURE_RegisterVersionPatches
+#define HK_EXCLUDE_FEATURE_MemoryTracker
+	 
+
+
 CGameApplication::CGameApplication(void)
 {
 	m_pWindow=NULL;
@@ -257,26 +272,26 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime(),0.0f,0.0f);
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		pTransform->translate(m_Timer.getElapsedTime()*10,0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime()*-1,0.0f,0.0f);
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		pTransform->translate(m_Timer.getElapsedTime()*-10,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,m_Timer.getElapsedTime(),0.0f);
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		pTransform->translate(0.0f,m_Timer.getElapsedTime()*10,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-10,0.0f);
 	}
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
