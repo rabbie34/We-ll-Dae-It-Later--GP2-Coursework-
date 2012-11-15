@@ -98,7 +98,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
 	pTestGameObject->addComponent(pMaterial);
 	//Create Mesh
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffShip.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx");
 	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
@@ -159,7 +159,7 @@ bool CGameApplication::initGame()
 
 
 	CGameObject *pCameraGameObject=new CGameObject();
-	pCameraGameObject->getTransform()->setPosition(0.0f,15.0f,-2.0f);
+	pCameraGameObject->getTransform()->setPosition(0.0f,0.0f,-5.0f);
 	pCameraGameObject->setName("Camera");
 
 	D3D10_VIEWPORT vp;
@@ -168,7 +168,7 @@ bool CGameApplication::initGame()
 
 	CCameraComponent *pCamera=new CCameraComponent();
 	pCamera->setUp(0.0f,1.0f,0.0f);
-	pCamera->setLookAt(0.0f,0.0f,20.0f);
+	pCamera->setLookAt(0.0f,0.0f,0.0f);
 	pCamera->setFOV(D3DX_PI*0.25f);
 	pCamera->setAspectRatio((float)(vp.Width/vp.Height));
 	pCamera->setFarClip(1000.0f);
@@ -316,7 +316,7 @@ void CGameApplication::update()
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		float yaw = pTransform->getRotation().y;
-		float pitch = pTransform->getRotation().x;
+		float pitch = pTransform->getRotation().x+80;
 		pTransform->translate(sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, -sin(pitch)*m_Timer.getElapsedTime()*5, cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
 	}
 
@@ -325,7 +325,7 @@ void CGameApplication::update()
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		float yaw = pTransform->getRotation().y;
-		float pitch = pTransform->getRotation().x;
+		float pitch = pTransform->getRotation().x+80;
 		pTransform->translate(-sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, sin(pitch)*m_Timer.getElapsedTime()*5, -cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
 	}
 
