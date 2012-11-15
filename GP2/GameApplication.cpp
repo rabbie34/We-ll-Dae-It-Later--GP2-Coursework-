@@ -286,28 +286,50 @@ void CGameApplication::update()
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime(),0.0f,0.0f);
+		pTransform->translate(0.0f,m_Timer.getElapsedTime()*5,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*-0.8,0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime()*-1,0.0f,0.0f);
+		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-5,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*0.8f,0.0f,0.0f);
 	}
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,m_Timer.getElapsedTime(),0.0f);
+		pTransform->translate(m_Timer.getElapsedTime()*5,0.0f,0.0f);
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-0.8f);
 	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
+		pTransform->translate(m_Timer.getElapsedTime()*-5,0.0f,0.0f);
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.8f);
 	}
-	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
+	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_UP))
+	{
+		//play sound
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		float yaw = pTransform->getRotation().y;
+		float pitch = pTransform->getRotation().x;
+		pTransform->translate(sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, -sin(pitch)*m_Timer.getElapsedTime()*5, cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
+	}
+
+	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_DOWN))
+	{
+		//play sound
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		float yaw = pTransform->getRotation().y;
+		float pitch = pTransform->getRotation().x;
+		pTransform->translate(-sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, sin(pitch)*m_Timer.getElapsedTime()*5, -cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
+	}
+
+	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 	
 	
 }

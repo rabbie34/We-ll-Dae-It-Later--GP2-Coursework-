@@ -69,6 +69,12 @@ public:
 		return m_vecPosition;
 	};
 
+	D3DXVECTOR3& getRotation()
+	{
+		return m_vecRotation;
+	}
+
+
 	//get world
 	D3DXMATRIX& getWorld()
 	{
