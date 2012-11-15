@@ -63,55 +63,75 @@ bool CGameApplication::initGame()
     //http://msdn.microsoft.com/en-us/library/bb173590%28v=VS.85%29.aspx - BMD
     m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST );	
 
-	//Create Game Object
+
 	CGameObject *pTestGameObject=new CGameObject();
 	//Set the name
-	pTestGameObject->setName("Car");
-	//Position
-	pTestGameObject->getTransform()->setPosition(10.0f,-2.5f,5.0f);
-	//create material
+	pTestGameObject->setName("Sky");
+	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx");
+	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
+	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Environment.fx");
+	pMaterial->loadEnvironmentTexture("Mars.dds");
+	pTestGameObject->addComponent(pMaterial);
+	pTestGameObject->addComponent(pMesh);
+	//add the game object
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+
+	//Create Game Object
+	pTestGameObject=new CGameObject();
+	//Set the name
+	pTestGameObject->setName("Test");
+	//Position
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,10.0f);
+	//create material
+	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
-	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
-	pMaterial->setSpecularMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
-	pMaterial->setSpecularPower(1.0f);
-	pMaterial->setParallaxBias(0.01f);
-	pMaterial->setParallaxScale(0.05f);
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
 	pMaterial->loadDiffuseTexture("armoredrecon_diff.png");
 	pMaterial->loadSpecularTexture("armoredrecon_spec.png");
-	pMaterial->loadBumpmapTexture("armoredrecon_N.png");
+	pMaterial->loadBumpTexture("armoredrecon_N.png");
 	pMaterial->loadParallaxTexture("armoredrecon_Height.png");
 	pTestGameObject->addComponent(pMaterial);
+
 	//Create Mesh
-	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"armoredrecon.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"armoredrecon.fbx");
+	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-	
-	pTestGameObject= new CGameObject();
-	pTestGameObject->setName("Plane");
-	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,10.0f);
-	pTestGameObject->getTransform()->setScale(0.04f,0.04f,0.04f);
-	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,-1.58f);
-	pMaterial=new CMaterialComponent;
+	pTestGameObject=new CGameObject();
+	//Set the name
+	pTestGameObject->setName("Test2");
+	//Position
+	pTestGameObject->getTransform()->setPosition(5.0f,0.0f,10.0f);
+	//create material
+	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
-	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setEffectFilename("DirectionalLight.fx");
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
+	pMaterial->loadDiffuseTexture("armoredrecon_diff.png");
+	pMaterial->loadSpecularTexture("armoredrecon_spec.png");
 	pTestGameObject->addComponent(pMaterial);
-	pMaterial->loadDiffuseTexture("mat_ship.bmp");
-	pMaterial->loadBumpmapTexture("mat_shipNORMAL.bmp");
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"spaceship01.fbx");
+
+	//Create Mesh
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"armoredrecon.fbx");
+	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
+
+	//Create Mesh
 
 
 	CGameObject *pCameraGameObject=new CGameObject();
-	pCameraGameObject->getTransform()->setPosition(0.0f,4.5f,-4.0f);
+	pCameraGameObject->getTransform()->setPosition(0.0f,0.0f,-5.0f);
 	pCameraGameObject->setName("Camera");
 
 	D3D10_VIEWPORT vp;
@@ -120,7 +140,7 @@ bool CGameApplication::initGame()
 
 	CCameraComponent *pCamera=new CCameraComponent();
 	pCamera->setUp(0.0f,1.0f,0.0f);
-	pCamera->setLookAt(0.0f,0.0f,10.0f);
+	pCamera->setLookAt(0.0f,0.0f,0.0f);
 	pCamera->setFOV(D3DX_PI*0.25f);
 	pCamera->setAspectRatio((float)(vp.Width/vp.Height));
 	pCamera->setFarClip(1000.0f);
@@ -237,25 +257,25 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime(),0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime()*-1,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime(),0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Plane")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
 	}
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
@@ -423,7 +443,7 @@ bool CGameApplication::initGraphics()
 bool CGameApplication::initWindow()
 {
 	m_pWindow=new CWin32Window();
-	if (!m_pWindow->init(TEXT("Games Programming"),800,800,false))
+	if (!m_pWindow->init(TEXT("Games Programming"),800,640,false))
 		return false;
 	return true;
 }
