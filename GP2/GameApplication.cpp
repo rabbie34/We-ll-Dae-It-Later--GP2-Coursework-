@@ -63,32 +63,26 @@ bool CGameApplication::initGame()
     //http://msdn.microsoft.com/en-us/library/bb173590%28v=VS.85%29.aspx - BMD
     m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST );	
 
-
+	//Creation of the environment. 
 	CGameObject *pTestGameObject=new CGameObject();
-	//Set the name
 	pTestGameObject->setName("Sky");
 	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx");
-	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	pMaterial->loadEnvironmentTexture("Mars.dds");
+	pMaterial->loadEnvironmentTexture("ss6.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
-	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-	//Create Game Object
+	//Creation of the players ship
 	pTestGameObject=new CGameObject();
-	//Set the name
-	pTestGameObject->setName("Test");
-	//Position
-	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,20.0f);
+	pTestGameObject->setName("player");
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,0.0f);
 	pTestGameObject->getTransform()->setRotation(-1.6f,0.0f,1.5f);
-	pTestGameObject->getTransform()->setScale(0.5f,0.5f,0.5f);
-	//create material
+	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
@@ -97,24 +91,17 @@ bool CGameApplication::initGame()
 	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
 	pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
 	pTestGameObject->addComponent(pMaterial);
-	//Create Mesh
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx");
-	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-
-	//Create Game Object
+	//Planet Earth
 	pTestGameObject=new CGameObject();
-	//Set the name
-	pTestGameObject->setName("Test2");
-	//Position
+	pTestGameObject->setName("Earth");
 	pTestGameObject->getTransform()->setPosition(-100.0f,150.0f,400.0f);
 	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
-	pTestGameObject->getTransform()->setScale(0.5f,0.5f,0.5f);
-	//create material
+	pTestGameObject->getTransform()->setScale(0.8f,0.8f,0.8f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
@@ -122,24 +109,16 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_plan.bmp");
 	pMaterial->loadBumpTexture("mat_plan NORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	//Create Mesh
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_earth.fbx");
-	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	//add the game object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-
-	//Create Game Object
-	pTestGameObject=new CGameObject();
-	//Set the name
-	pTestGameObject->setName("Test3");
-	//Position
-	pTestGameObject->getTransform()->setPosition(100.0f,150.0f,400.0f);
-	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
-	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.f);
-	//create material
+	/*pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Satellite");
+	pTestGameObject->getTransform()->setPosition(50.0f,75.0f,300.0f);
+	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
+	pTestGameObject->getTransform()->setRotation(1.6f,1.0f,1.5f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
@@ -147,45 +126,41 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_sate.bmp");
 	pMaterial->loadBumpTexture("mat_stateNORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	//Create Mesh
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx");
-	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	//add the game object
-	m_pGameObjectManager->addGameObject(pTestGameObject);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
-	//Create Mesh
 
+
+	//Creation and positioning of the camera
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	D3DXVECTOR3 coords = pTransform->getPosition();
 
 	CGameObject *pCameraGameObject=new CGameObject();
-	pCameraGameObject->getTransform()->setPosition(0.0f,0.0f,-5.0f);
+	pCameraGameObject->getTransform()->setPosition(0.0f,2.0f,-15.0f);
 	pCameraGameObject->setName("Camera");
-
 	D3D10_VIEWPORT vp;
 	UINT numViewports=1;
 	m_pD3D10Device->RSGetViewports(&numViewports,&vp);
-
 	CCameraComponent *pCamera=new CCameraComponent();
 	pCamera->setUp(0.0f,1.0f,0.0f);
-	pCamera->setLookAt(0.0f,0.0f,0.0f);
+	//pCamera->setLookAt(0.0f,0.0f,0.0f);
+	pCamera->setLookAt(coords.x,coords.y,coords.z);
 	pCamera->setFOV(D3DX_PI*0.25f);
 	pCamera->setAspectRatio((float)(vp.Width/vp.Height));
 	pCamera->setFarClip(1000.0f);
 	pCamera->setNearClip(0.1f);
 	pCameraGameObject->addComponent(pCamera);
-
 	m_pGameObjectManager->addGameObject(pCameraGameObject);
 
+	//directional light for the whole scene
 	CGameObject *pLightGameObject=new CGameObject();
 	pLightGameObject->setName("DirectionalLight");
-
 	CDirectionalLightComponent *pLightComponent=new CDirectionalLightComponent();
 	pLightComponent->setDirection(D3DXVECTOR3(0.0f,1.0f,-1.0f));
 	pLightGameObject->addComponent(pLightComponent);
-
 	m_pGameObjectManager->addGameObject(pLightGameObject);
-
 	m_pGameObjectManager->setMainLight(pLightComponent);
 
 	//init, this must be called after we have created all game objects
@@ -285,28 +260,28 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*5,0.0f);
 		pTransform->rotate(m_Timer.getElapsedTime()*-0.8,0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-5,0.0f);
 		pTransform->rotate(m_Timer.getElapsedTime()*0.8f,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		pTransform->translate(m_Timer.getElapsedTime()*5,0.0f,0.0f);
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-0.8f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		pTransform->translate(m_Timer.getElapsedTime()*-5,0.0f,0.0f);
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.8f);
 	}
@@ -314,20 +289,35 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_UP))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		float yaw = pTransform->getRotation().y;
-		float pitch = pTransform->getRotation().x+80;
+		float pitch = pTransform->getRotation().x-80;
 		pTransform->translate(sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, -sin(pitch)*m_Timer.getElapsedTime()*5, cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
 	}
 
 	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_DOWN))
 	{
 		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		float yaw = pTransform->getRotation().y;
-		float pitch = pTransform->getRotation().x+80;
+		float pitch = pTransform->getRotation().x-80;
 		pTransform->translate(-sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, sin(pitch)*m_Timer.getElapsedTime()*5, -cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
 	}
+
+	//rotates the planets
+	bool gameplaying=true;
+	if(gameplaying=true){
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Earth")->getTransform();
+	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.03f);
+	}
+
+	//make the camera follow the ship around the screen
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	D3DXVECTOR3 coords = pTransform->getPosition();
+	CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
+	pCamera->setLookAt(coords.x,coords.y,coords.z);
+	
+
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 	
@@ -493,7 +483,7 @@ bool CGameApplication::initGraphics()
 bool CGameApplication::initWindow()
 {
 	m_pWindow=new CWin32Window();
-	if (!m_pWindow->init(TEXT("Games Programming"),800,640,false))
+	if (!m_pWindow->init(TEXT("Games Programming"),800,800,false))
 		return false;
 	return true;
 }
