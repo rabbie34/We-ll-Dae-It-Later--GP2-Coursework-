@@ -114,6 +114,7 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
+	//Satellite
 	/*pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Satellite");
 	pTestGameObject->getTransform()->setPosition(50.0f,75.0f,300.0f);
@@ -131,7 +132,58 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
+	//Asteroid
+	/*pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Asteroid");
+	pTestGameObject->getTransform()->setPosition(5.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(0.07f,0.07f,0.07f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_ateroid_1.bmp");
+	pMaterial->loadBumpTexture("mat_asteNORMAL.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
+	//Space Gate
+	/*pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Gate");
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,5.0f);
+	pTestGameObject->getTransform()->setScale(0.15f,0.15f,0.15f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_gate.bmp");
+	pMaterial->loadBumpTexture("mat_gate NORMAL.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"gate.fbx");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+
+	//Space Station
+	/*pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Station");
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,30.0f);
+	pTestGameObject->getTransform()->setRotation(1.6f,0.0f,1.6f);
+	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_stat.bmp");
+	pMaterial->loadBumpTexture("mat_stat NORMAL.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"station.fbx");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
 	//Creation and positioning of the camera
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
@@ -257,6 +309,9 @@ void CGameApplication::update()
 {
 	m_Timer.update();
 
+	D3DXVECTOR3 coords; //Variable to store the positon of the spaceship
+	bool gameplaying=true; //Variable used to get around editing more than one object at a time
+
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
@@ -305,19 +360,24 @@ void CGameApplication::update()
 	}
 
 	//rotates the planets
-	bool gameplaying=true;
 	if(gameplaying=true){
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Earth")->getTransform();
 	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.03f);
 	}
 
 	//make the camera follow the ship around the screen
+	if(gameplaying=true)
+	{
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	D3DXVECTOR3 coords = pTransform->getPosition();
+	coords = pTransform->getPosition();
 	CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
 	pCamera->setLookAt(coords.x,coords.y,coords.z);
-	
-
+	}
+	if(gameplaying=true)
+	{
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+	pTransform->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
+	}
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 	
