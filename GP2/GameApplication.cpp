@@ -4,6 +4,7 @@
 
 #include "Input.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 CGameApplication::CGameApplication(void)
 {
@@ -151,7 +152,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
 	//Space Gate
-	/*pTestGameObject=new CGameObject();
+	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Gate");
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,5.0f);
 	pTestGameObject->getTransform()->setScale(0.15f,0.15f,0.15f);
@@ -165,7 +166,7 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"gate.fbx");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Space Station
 	/*pTestGameObject=new CGameObject();
@@ -188,9 +189,8 @@ bool CGameApplication::initGame()
 	//Creation and positioning of the camera
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 	D3DXVECTOR3 coords = pTransform->getPosition();
-
 	CGameObject *pCameraGameObject=new CGameObject();
-	pCameraGameObject->getTransform()->setPosition(0.0f,2.0f,-15.0f);
+	pCameraGameObject->getTransform()->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
 	pCameraGameObject->setName("Camera");
 	D3D10_VIEWPORT vp;
 	UINT numViewports=1;
@@ -310,7 +310,13 @@ void CGameApplication::update()
 	m_Timer.update();
 
 	D3DXVECTOR3 coords; //Variable to store the positon of the spaceship
+	D3DXVECTOR3 coords2; //Variable to store the rotation of the spaceship
 	bool gameplaying=true; //Variable used to get around editing more than one object at a time
+
+	if (CInput::getInstance().getMouse()->getMouseDown((int)0))
+	{
+		//Add in code to fire weapon
+	}
 
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
@@ -333,6 +339,7 @@ void CGameApplication::update()
 		pTransform->translate(m_Timer.getElapsedTime()*5,0.0f,0.0f);
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-0.8f);
 	}
+
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		//play sound
