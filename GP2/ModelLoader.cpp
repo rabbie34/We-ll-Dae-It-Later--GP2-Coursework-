@@ -2,6 +2,8 @@
 #include <fbxsdk.h>
 
 #include "MeshComponent.h"
+#include <string>
+using namespace std;
 
 //might need this for new versions of the SDK
 //#include <fbxsdk/utils/>
@@ -56,19 +58,19 @@ CMeshComponent * CModelLoader::createCube(ID3D10Device *pDevice,float width, flo
 	return pMesh;
 }
 
-CMeshComponent *CModelLoader::loadModelFromFile(ID3D10Device *pDevice,const string& filename)
+CMeshComponent *CModelLoader::loadModelFromFile(ID3D10Device *pDevice,const string& filename,string fix)
 {
 	CMeshComponent * pRenderable=NULL;
 	string extension=filename.substr(filename.find('.')+1);
 
 	if (extension.compare("fbx")==0)
-		pRenderable=loadFbxModelFromFile(pDevice,filename);
+		pRenderable=loadFbxModelFromFile(pDevice,filename,fix);
 
 	return pRenderable;
 }
 
 
-CMeshComponent * CModelLoader::loadFbxModelFromFile(ID3D10Device *pDevice,const string& filename)
+CMeshComponent * CModelLoader::loadFbxModelFromFile(ID3D10Device *pDevice,const string& filename, string fix)
 {
 	CMeshComponent * pMeshComponent=new CMeshComponent();
 	int noVerts=0;
@@ -130,10 +132,18 @@ CMeshComponent * CModelLoader::loadFbxModelFromFile(ID3D10Device *pDevice,const 
 						Vertex * pVerts=new Vertex[noVerts];
 						for(int i=0;i<noVerts;i++)
 						{
-
+							if(fix==("buffshipfix"))
+							{
+								pVerts[i].Pos.z=-verts[i][0];
+								pVerts[i].Pos.x=-verts[i][1];
+								pVerts[i].Pos.y=verts[i][2];
+							}
+							else
+							{
 								pVerts[i].Pos.x=verts[i][0];
 								pVerts[i].Pos.y=verts[i][1];
 								pVerts[i].Pos.z=verts[i][2];
+							}
 						}
 
 						for (int iPolygon = 0; iPolygon < pMesh->GetPolygonCount(); iPolygon++) { 

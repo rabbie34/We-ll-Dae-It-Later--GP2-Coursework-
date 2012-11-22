@@ -82,7 +82,7 @@ bool CGameApplication::initGame()
 	CGameObject *pTestGameObject=new CGameObject();
 	//Set the name
 	pTestGameObject->setName("Sky");
-	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx");
+	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
 	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
@@ -101,19 +101,20 @@ bool CGameApplication::initGame()
 	pTestGameObject->setName("Test");
 	//Position
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,10.0f);
+	pTestGameObject->getTransform()->setScale(0.25f,0.25f,0.25f);
 	//create material
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
-	pMaterial->loadDiffuseTexture("armoredrecon_diff.png");
-	pMaterial->loadSpecularTexture("armoredrecon_spec.png");
-	pMaterial->loadBumpTexture("armoredrecon_N.png");
-	pMaterial->loadParallaxTexture("armoredrecon_Height.png");
+	pMaterial->loadDiffuseTexture("buffShip_Diff.jpg");
+	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
+	//pMaterial->loadBumpTexture("armoredrecon_N.png");
+	pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
 	pTestGameObject->addComponent(pMaterial);
 
 	//Create Mesh
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"armoredrecon.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
@@ -135,7 +136,7 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMaterial);
 
 	//Create Mesh
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"armoredrecon.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"armoredrecon.fbx","");
 	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
@@ -155,7 +156,7 @@ bool CGameApplication::initGame()
 
 	CCameraComponent *pCamera=new CCameraComponent();
 	pCamera->setUp(0.0f,1.0f,0.0f);
-	pCamera->setLookAt(0.0f,0.0f,0.0f);
+	pCamera->setLookAt(0.0f,0.0f,1000000.0f);
 	pCamera->setFOV(D3DX_PI*0.25f);
 	pCamera->setAspectRatio((float)(vp.Width/vp.Height));
 	pCamera->setFarClip(1000.0f);
@@ -269,33 +270,57 @@ void CGameApplication::update()
 {
 	m_Timer.update();
 
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime()*10,0.0f,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*2.5f,0.0f,0.0f);
+		pTransform->translate(0,m_Timer.getElapsedTime()*-5,0);
 	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime()*-10,0.0f,0.0f);
-	}
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*10,0.0f);
-	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-10,0.0f);
-	}
-	m_pGameObjectManager->update(m_Timer.getElapsedTime());
+		pTransform->rotate(m_Timer.getElapsedTime()*-2.5f,0.0f,0.0f);
+		pTransform->translate(0,m_Timer.getElapsedTime()*5,0);
 
+	}
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
+	{
+		//play sound
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
+		pTransform->translate(m_Timer.getElapsedTime()*5,0,0);
+	}
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
+	{
+		//play sound
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);
+		pTransform->translate(m_Timer.getElapsedTime()*-5,0,0);
+	}
 	
+
+	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_UP))
+	{
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+		D3DXVECTOR3 forward = pTransform->getForward();
+		pTransform->translate(forward.x* m_Timer.getElapsedTime() * 5,forward.y* m_Timer.getElapsedTime() * 5,forward.z* m_Timer.getElapsedTime() * 5);
+	}
+	
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
+	D3DXVECTOR3 coords = pTransform->getPosition();
+	//D3DXVECTOR3 forward = pTransform->getForward();
+	//CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
+	//pCamera->setLookAt(coords.x,coords.y,coords.z);
+
+	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+	pTransform2->setPosition(0,0,coords.z-15);
+
+	m_pGameObjectManager->update(m_Timer.getElapsedTime());
+	
+
 	
 }
 

@@ -18,10 +18,10 @@ public:
 	CModelLoader();
 	~CModelLoader();
 
-	CMeshComponent * loadModelFromFile(ID3D10Device *pDevice,const string& filename);
+	CMeshComponent * loadModelFromFile(ID3D10Device *pDevice,const string& filename,string fix);
 	CMeshComponent * createCube(ID3D10Device *pDevice,float width, float height, float length);  
 private:
-	CMeshComponent * loadFbxModelFromFile(ID3D10Device *pDevice,const string& filename);
+	CMeshComponent * loadFbxModelFromFile(ID3D10Device *pDevice,const string& filename,string fix);
 
 	void computeTangents(Vertex *pVerts,int vertexCount);
 };
