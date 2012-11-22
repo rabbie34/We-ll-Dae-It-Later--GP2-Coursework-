@@ -82,7 +82,7 @@ bool CGameApplication::initGame()
 	//Creation of the players ship
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("player");
-	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,-20.0f);
 	pTestGameObject->getTransform()->setRotation(-1.6f,0.0f,1.6f);
 	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
 	pMaterial=new CMaterialComponent();
@@ -319,10 +319,12 @@ void CGameApplication::update()
 	D3DXVECTOR3 mouseCoords; //Variable to store the rotation of the spaceship
 	bool gameplaying=true; //Variable used to get around editing more than one object at a time
 
-	//rotates the planets
+	//rotates shit
 	if(gameplaying=true){
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Earth")->getTransform();
-	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.03f);
+	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.05f);
+	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
+	pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.25f);
 	}
 
 	//make the camera follow the ship around the screen
@@ -335,7 +337,6 @@ void CGameApplication::update()
 	D3DXVECTOR3 forward = pTransform->getForward();
 	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
 	pTransform2->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
-	//pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5.0f,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5.0f,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5.0f);
 	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 	}
 
