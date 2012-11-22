@@ -49,4 +49,6 @@ private:
 	CGameObjectManager *m_pGameObjectManager;
 
 	CModelLoader modelloader;
+	D3DXVECTOR3 shipRot;
+	float speed;
 };

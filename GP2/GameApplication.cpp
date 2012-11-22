@@ -6,6 +6,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
+
 CGameApplication::CGameApplication(void)
 {
 	m_pWindow=NULL;
@@ -82,7 +83,7 @@ bool CGameApplication::initGame()
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("player");
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,0.0f);
-	pTestGameObject->getTransform()->setRotation(-1.6f,0.0f,1.5f);
+	pTestGameObject->getTransform()->setRotation(-1.6f,0.0f,1.6f);
 	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
@@ -96,6 +97,10 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
+
+	//Sets the ship speed and rotation
+	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
+	speed=5.0f;
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -313,63 +318,6 @@ void CGameApplication::update()
 	D3DXVECTOR3 mouseCoords; //Variable to store the rotation of the spaceship
 	bool gameplaying=true; //Variable used to get around editing more than one object at a time
 
-	if (CInput::getInstance().getMouse()->getMouseDown((int)0))
-	{
-		float mousex = CInput::getInstance().getMouse()->getAbsoluteMouseX();
-		float mousey = CInput::getInstance().getMouse()->getAbsoluteMouseY();
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-
-		//Add in code to fire weapon
-	}
-
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		pTransform->translate(0.0f,m_Timer.getElapsedTime()*5,0.0f);
-		pTransform->rotate(m_Timer.getElapsedTime()*-0.8,0.0f,0.0f);
-	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-5,0.0f);
-		pTransform->rotate(m_Timer.getElapsedTime()*0.8f,0.0f,0.0f);
-	}
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		pTransform->translate(m_Timer.getElapsedTime()*5,0.0f,0.0f);
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-0.8f);
-	}
-
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		pTransform->translate(m_Timer.getElapsedTime()*-5,0.0f,0.0f);
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.8f);
-	}
-
-	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_UP))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		float yaw = pTransform->getRotation().y;
-		float pitch = pTransform->getRotation().x-80;
-		pTransform->translate(sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, -sin(pitch)*m_Timer.getElapsedTime()*5, cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
-	}
-
-	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_DOWN))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		float yaw = pTransform->getRotation().y;
-		float pitch = pTransform->getRotation().x-80;
-		pTransform->translate(-sin(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5, sin(pitch)*m_Timer.getElapsedTime()*5, -cos(yaw) * cos(pitch) * m_Timer.getElapsedTime() * 5  );
-	}
-
 	//rotates the planets
 	if(gameplaying=true){
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Earth")->getTransform();
@@ -385,13 +333,59 @@ void CGameApplication::update()
 	pCamera->setLookAt(coords.x,coords.y,coords.z);
 	D3DXVECTOR3 forward = pTransform->getForward();
 	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
-	pTransform2->setPosition(coords.x-forward.x*15.0f,coords.y-forward.y*15.0f,coords.z-forward.z*15.0f);
+	pTransform2->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
+	//pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5.0f,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5.0f,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5.0f);
+	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
+	}
+
+	if(gameplaying=true)
+	{
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+		D3DXVECTOR3 baws = pTransform->getForward();
+		pTransform->translate(baws.x* m_Timer.getElapsedTime() * speed, baws.z*m_Timer.getElapsedTime()*5, baws.y * m_Timer.getElapsedTime() * speed );
 	}
 	
+	
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
+	{
+	//play sound
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	pTransform->translate(0.0f,m_Timer.getElapsedTime()*8,0.0f);
+	pTransform->rotate(m_Timer.getElapsedTime()*-2.0f,0.0f,0.0f);	
+	}
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
+	{
+	//play sound
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	pTransform->translate(0.0f,m_Timer.getElapsedTime()*-8,0.0f);
+	pTransform->rotate(m_Timer.getElapsedTime()*2.0f,0.0f,0.0f);
+	}
+
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
+	{
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	pTransform->translate(m_Timer.getElapsedTime()*8,0.0f,0.0f);
+	pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-4.0f,0.0f);
+	}
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
+	{
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	pTransform->translate(m_Timer.getElapsedTime()*-8,0.0f,0.0f);
+	float roll = pTransform->getRotation().y;
+	pTransform->rotate(0.0f,m_Timer.getElapsedTime()*4.0f,0.0f);	
+	}
+
+	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_UP)))
+	{
+		speed=speed+0.1f;
+	}
+	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_DOWN)))
+	{
+		speed=speed-0.1f;
+	}
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
-	
-	
+
 }
 
 bool CGameApplication::initInput()
