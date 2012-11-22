@@ -101,6 +101,7 @@ bool CGameApplication::initGame()
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
 	speed=5.0f;
+	rotSpeed=8.0f;
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -121,7 +122,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Satellite
-	/*pTestGameObject=new CGameObject();
+	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Satellite");
 	pTestGameObject->getTransform()->setPosition(50.0f,75.0f,300.0f);
 	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
@@ -136,7 +137,7 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Asteroid
 	/*pTestGameObject=new CGameObject();
@@ -345,43 +346,50 @@ void CGameApplication::update()
 		pTransform->translate(baws.x* m_Timer.getElapsedTime() * speed, baws.z*m_Timer.getElapsedTime()*5, baws.y * m_Timer.getElapsedTime() * speed );
 	}
 	
-	
+	//Tilt the ship up and down
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
-	//play sound
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(0.0f,m_Timer.getElapsedTime()*8,0.0f);
+	pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
 	pTransform->rotate(m_Timer.getElapsedTime()*-2.0f,0.0f,0.0f);	
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
-	//play sound
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(0.0f,m_Timer.getElapsedTime()*-8,0.0f);
+	pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
 	pTransform->rotate(m_Timer.getElapsedTime()*2.0f,0.0f,0.0f);
 	}
 
+	//Tilt the ship left and right
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(m_Timer.getElapsedTime()*8,0.0f,0.0f);
+	pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
 	pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-4.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(m_Timer.getElapsedTime()*-8,0.0f,0.0f);
-	float roll = pTransform->getRotation().y;
+	pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
 	pTransform->rotate(0.0f,m_Timer.getElapsedTime()*4.0f,0.0f);	
 	}
 
+	//Increase and decrease the ship speed
 	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_UP)))
 	{
-		speed=speed+0.1f;
+		if(speed<50.0f)
+		{
+		speed=speed+0.05f;
+		rotSpeed=rotSpeed+0.1f;
+		}
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_DOWN)))
 	{
-		speed=speed-0.1f;
+		if(speed>3.5f)
+		{
+		speed=speed-0.05f;
+		rotSpeed=rotSpeed-0.1f;
+		}
 	}
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());

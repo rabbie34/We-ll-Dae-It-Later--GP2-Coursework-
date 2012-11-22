@@ -51,4 +51,5 @@ private:
 	CModelLoader modelloader;
 	D3DXVECTOR3 shipRot;
 	float speed;
+	float rotSpeed;
 };
