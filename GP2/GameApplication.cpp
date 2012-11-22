@@ -256,7 +256,7 @@ void CGameApplication::render()
 				}
 			}
 		}
-
+		CGUIManager::getInstance().render();
 	}
 	//Swaps the buffers in the chain, the back buffer to the front(screen)
 	//http://msdn.microsoft.com/en-us/library/bb174576%28v=vs.85%29.aspx - BMD
