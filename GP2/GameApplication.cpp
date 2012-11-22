@@ -310,11 +310,15 @@ void CGameApplication::update()
 	m_Timer.update();
 
 	D3DXVECTOR3 coords; //Variable to store the positon of the spaceship
-	D3DXVECTOR3 coords2; //Variable to store the rotation of the spaceship
+	D3DXVECTOR3 mouseCoords; //Variable to store the rotation of the spaceship
 	bool gameplaying=true; //Variable used to get around editing more than one object at a time
 
 	if (CInput::getInstance().getMouse()->getMouseDown((int)0))
 	{
+		float mousex = CInput::getInstance().getMouse()->getAbsoluteMouseX();
+		float mousey = CInput::getInstance().getMouse()->getAbsoluteMouseY();
+		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+
 		//Add in code to fire weapon
 	}
 
@@ -379,9 +383,9 @@ void CGameApplication::update()
 	coords = pTransform->getPosition();
 	CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
 	pCamera->setLookAt(coords.x,coords.y,coords.z);
-
+	D3DXVECTOR3 forward = pTransform->getForward();
 	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
-	pTransform2->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
+	pTransform2->setPosition(coords.x-forward.x*15.0f,coords.y-forward.y*15.0f,coords.z-forward.z*15.0f);
 	}
 	
 
