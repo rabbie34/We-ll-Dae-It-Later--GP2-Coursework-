@@ -49,6 +49,9 @@
     <Filter Include="Components\Camera">
       <UniqueIdentifier>{04c31a65-dfe5-4bbb-9678-f1fa5f74b35e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{daa59041-b037-4d1c-b219-2cb75edf5aa0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +104,15 @@
     </ClCompile>
     <ClCompile Include="MeshComponent.cpp">
       <Filter>Components\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUISystemInterface.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInterfaceDirectx10.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +175,18 @@
     </ClInclude>
     <ClInclude Include="Geometry.h">
       <Filter>Components\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D10Effect.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUISystemInterface.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderInterfaceDirectx10.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
