@@ -379,12 +379,11 @@ void CGameApplication::update()
 	coords = pTransform->getPosition();
 	CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
 	pCamera->setLookAt(coords.x,coords.y,coords.z);
+
+	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+	pTransform2->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
 	}
-	if(gameplaying=true)
-	{
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Camera")->getTransform();
-	pTransform->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
-	}
+	
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 	
