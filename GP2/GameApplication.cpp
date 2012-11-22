@@ -68,7 +68,7 @@ bool CGameApplication::initGame()
 	//Creation of the environment. 
 	CGameObject *pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Sky");
-	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx");
+	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial=new CMaterialComponent();
@@ -83,7 +83,6 @@ bool CGameApplication::initGame()
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("player");
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,-20.0f);
-	pTestGameObject->getTransform()->setRotation(-1.6f,0.0f,1.6f);
 	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
@@ -93,7 +92,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
 	pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -116,7 +115,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_plan.bmp");
 	pMaterial->loadBumpTexture("mat_plan NORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_earth.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_earth.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -134,7 +133,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_sate.bmp");
 	pMaterial->loadBumpTexture("mat_stateNORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -152,7 +151,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_ateroid_1.bmp");
 	pMaterial->loadBumpTexture("mat_asteNORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);*/
@@ -169,7 +168,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_gate.bmp");
 	pMaterial->loadBumpTexture("mat_gate NORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"gate.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"gate.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -187,7 +186,7 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("mat_stat.bmp");
 	pMaterial->loadBumpTexture("mat_stat NORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"station.fbx");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"station.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);*/
@@ -336,7 +335,7 @@ void CGameApplication::update()
 	pCamera->setLookAt(coords.x,coords.y,coords.z);
 	D3DXVECTOR3 forward = pTransform->getForward();
 	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
-	pTransform2->setPosition(coords.x,coords.y+2.0f,coords.z-15.0f);
+	pTransform2->setPosition(coords.x,coords.y+4.0f,coords.z-15.0f);
 	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 	}
 
@@ -344,7 +343,7 @@ void CGameApplication::update()
 	{
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		D3DXVECTOR3 baws = pTransform->getForward();
-		pTransform->translate(baws.x* m_Timer.getElapsedTime() * speed, baws.z*m_Timer.getElapsedTime()*5, baws.y * m_Timer.getElapsedTime() * speed );
+		pTransform->translate(baws.x* m_Timer.getElapsedTime() * speed, baws.y*m_Timer.getElapsedTime(), baws.z * m_Timer.getElapsedTime() * speed );
 	}
 	
 	//Tilt the ship up and down
@@ -366,13 +365,13 @@ void CGameApplication::update()
 	{
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 	pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
-	pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-4.0f,0.0f);
+	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 	pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
-	pTransform->rotate(0.0f,m_Timer.getElapsedTime()*4.0f,0.0f);	
+	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
 	//Increase and decrease the ship speed
