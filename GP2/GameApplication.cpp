@@ -307,6 +307,7 @@ void CGameApplication::update()
 		D3DXVECTOR3 forward = pTransform->getForward();
 		pTransform->translate(forward.x* m_Timer.getElapsedTime() * 5,forward.y* m_Timer.getElapsedTime() * 5,forward.z* m_Timer.getElapsedTime() * 5);
 	}
+
 	
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);

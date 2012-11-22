@@ -132,7 +132,7 @@ CMeshComponent * CModelLoader::loadFbxModelFromFile(ID3D10Device *pDevice,const 
 						Vertex * pVerts=new Vertex[noVerts];
 						for(int i=0;i<noVerts;i++)
 						{
-							if(fix==("buffshipfix"))
+							if(fix=="buffshipfix")
 							{
 								pVerts[i].Pos.z=-verts[i][0];
 								pVerts[i].Pos.x=-verts[i][1];
@@ -154,7 +154,10 @@ CMeshComponent * CModelLoader::loadFbxModelFromFile(ID3D10Device *pDevice,const 
 								FbxVector4 fbxNormal;	
 								pMesh->GetPolygonVertexNormal(iPolygon, iPolygonVertex, fbxNormal);	
 								fbxNormal.Normalize();	
-								pVerts[fbxCornerIndex].Normal=D3DXVECTOR3(fbxNormal[0],fbxNormal[1],fbxNormal[2]);
+								if(fix=="buffshipfix")
+									pVerts[fbxCornerIndex].Normal=D3DXVECTOR3(-fbxNormal[1],fbxNormal[2],-fbxNormal[0]);
+								else
+									pVerts[fbxCornerIndex].Normal=D3DXVECTOR3(fbxNormal[0],fbxNormal[1],fbxNormal[2]);
 
 								FbxVector2 fbxUV = FbxVector2(0.0, 0.0);	
 								FbxLayerElementUV* fbxLayerUV = pMesh->GetLayer(0)->GetUVs();
