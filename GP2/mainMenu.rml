@@ -4,14 +4,12 @@
 	<link type="text/rcss" href="invader.rcss"/>
 </head>
 <body class="window">
-<!--
 	<div id="title_bar">
 		<handle move_target="#document">
 			<div id="icon"></div>
 			<span id="title">Hello</span>
 		</handle>
 	</div>
--->
 	<div id="window">
 		<div id="content">
 		</div>
