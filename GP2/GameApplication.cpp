@@ -99,8 +99,8 @@ bool CGameApplication::initGame()
 
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
-	speed=5.0f;
-	rotSpeed=8.0f;
+	speed=8.0f;
+	rotSpeed=12.0f;
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -202,7 +202,6 @@ bool CGameApplication::initGame()
 	m_pD3D10Device->RSGetViewports(&numViewports,&vp);
 	CCameraComponent *pCamera=new CCameraComponent();
 	pCamera->setUp(0.0f,1.0f,0.0f);
-	//pCamera->setLookAt(0.0f,0.0f,0.0f);
 	pCamera->setLookAt(coords.x,coords.y,coords.z);
 	pCamera->setFOV(D3DX_PI*0.25f);
 	pCamera->setAspectRatio((float)(vp.Width/vp.Height));
@@ -257,27 +256,22 @@ void CGameApplication::render()
 		CMeshComponent *pMesh=static_cast<CMeshComponent*>((*iter)->getComponent("MeshComponent"));
 		//and the material
 		CMaterialComponent *pMaterial=static_cast<CMaterialComponent*>((*iter)->getComponent("MaterialComponent"));
-
 		//do we have a matrial
 		if (pMaterial)
 		{
 			CCameraComponent *camera=m_pGameObjectManager->getMainCamera();
-
 			//set the matrices
 			pMaterial->setProjectionMatrix((float*)camera->getProjection());
 			pMaterial->setViewMatrix((float*)camera->getView());
 			pMaterial->setWorldMatrix((float*)pTransform->getWorld());
 			//set light colour
 			pMaterial->setAmbientLightColour(D3DXCOLOR(0.5f,0.5f,0.5f,1.0f));
-
 			//get the main light and the camera
 			CDirectionalLightComponent * light=m_pGameObjectManager->getMainLight();
 			pMaterial->setDiffuseLightColour(light->getDiffuseColour());
 			pMaterial->setSpecularLightColour(light->getSpecularColour());
 			pMaterial->setLightDirection(light->getLightDirection());
-			
 			pMaterial->setCameraPosition(camera->getParent()->getTransform()->getPosition());
-
 			pMaterial->setTextures();
 			pMaterial->setMaterial();
 			//bind the vertex layout
@@ -315,10 +309,10 @@ void CGameApplication::update()
 	m_Timer.update();
 
 	D3DXVECTOR3 coords; //Variable to store the positon of the spaceship
-	D3DXVECTOR3 mouseCoords; //Variable to store the rotation of the spaceship
+	D3DXVECTOR2 mouseCoords; //Variable to store the position of the mouse on screen.
 	bool gameplaying=true; //Variable used to get around editing more than one object at a time
 
-	//rotates shit
+	//rotates Objects in the scene
 	if(gameplaying=true){
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Earth")->getTransform();
 	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.05f);
@@ -326,7 +320,7 @@ void CGameApplication::update()
 	pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.25f);
 	}
 
-	//make the camera follow the ship around the screen
+	//make the camera follow the ship around the screen and rotates the ship back to its original position if no key is pressed.
 	if(gameplaying=true)
 	{
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
@@ -339,11 +333,12 @@ void CGameApplication::update()
 	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 	}
 
+	//Moves the ship forward constantly
 	if(gameplaying=true)
 	{
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-		D3DXVECTOR3 baws = pTransform->getForward();
-		pTransform->translate(baws.x* m_Timer.getElapsedTime() * speed, baws.y*m_Timer.getElapsedTime(), baws.z * m_Timer.getElapsedTime() * speed );
+		D3DXVECTOR3 direction = pTransform->getForward();
+		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
 	
 	//Tilt the ship up and down
@@ -374,23 +369,37 @@ void CGameApplication::update()
 	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
-	//Increase and decrease the ship speed
-	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_UP)))
+	//Increase and decrease the ship speed.
+	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_SPACE)))
 	{
-		if(speed<50.0f)
+		if(speed<20.0f)
 		{
-		speed=speed+0.05f;
-		rotSpeed=rotSpeed+0.1f;
+		speed=speed+m_Timer.getElapsedTime()*5.0f;
+		rotSpeed=rotSpeed+m_Timer.getElapsedTime()*5.0f;
 		}
 	}
-	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_DOWN)))
+	else
 	{
-		if(speed>3.5f)
+		if(speed>8.0f)
 		{
-		speed=speed-0.05f;
-		rotSpeed=rotSpeed-0.1f;
+		speed=speed-m_Timer.getElapsedTime()*5.0f;
+		rotSpeed=rotSpeed-m_Timer.getElapsedTime()*5.0f;
+		}
+		if(speed<8.0f)
+		{
+			speed=8.0f;
+			rotSpeed=12.0f;
 		}
 	}
+	
+	/*if(CInput::getInstance().getKeyboard()->isKeyUp((VK_SPACE)))
+	{
+		if(speed>5.0f)
+		{
+			speed=speed-0.05f;
+			rotSpeed=rotSpeed-0.1f;
+		}
+	}*/
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
