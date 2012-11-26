@@ -1,6 +1,8 @@
 #include "GameObjectManager.h"
 #include "GameObject.h"
 #include "CameraComponent.h"
+#include "Physics.h"
+#include "BaseCollider.h"
 
 CGameObjectManager::CGameObjectManager()
 {
@@ -10,6 +12,11 @@ CGameObjectManager::~CGameObjectManager()
 {
 	//call clear
 	clear();
+}
+
+void CGameObjectManager::removeGameObject(CGameObject *pObject)
+{
+
 }
 
 //add game object

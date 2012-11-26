@@ -29,6 +29,8 @@ CGameApplication::~CGameApplication(void)
 		m_pGameObjectManager=NULL;
 	}
 
+	CPhysics::getInstance().destroy();
+
 	if (m_pRenderTargetView)
 		m_pRenderTargetView->Release();
 	if (m_pDepthStencelView)
@@ -54,9 +56,24 @@ bool CGameApplication::init()
 		return false;
 	if (!initInput())
 		return false;
+	if (!initPhysics())
+		return false;
 	if (!initGame())
 		return false;
 	return true;
+}
+
+void CGameApplication::contactPointCallback (const hkpContactPointEvent &event)
+{
+	/*
+	//Called when a collision occurs
+	hkpRigidBody *pBody1=event.getBody(0);
+	hkpRigidBody *pBody2=event.getBody(1);
+
+	CGameObject *pGameObject1=(CGameObject*)pBody1->getUserData();
+	CGameObject *pGameObject2=(CGameObject*)pBody2->getUserData();
+
+	//Do something with the game objects*/
 }
 
 bool CGameApplication::initGame()
@@ -95,6 +112,11 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
+	CBoxCollider *pBox=new CBoxCollider();
+	pBox->setExtents(1.0f,1.0f,1.0f);
+	pBox->enable();
+	pBox->physicsShape();
+	pTestGameObject->addComponent(pBox);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Sets the ship speed and rotation
@@ -308,6 +330,8 @@ void CGameApplication::update()
 {
 	m_Timer.update();
 
+	CPhysics::getInstance().update(m_Timer.getElapsedTime());
+
 	D3DXVECTOR3 coords; //Variable to store the positon of the spaceship
 	D3DXVECTOR2 mouseCoords; //Variable to store the position of the mouse on screen.
 	bool gameplaying=true; //Variable used to get around editing more than one object at a time
@@ -403,6 +427,14 @@ void CGameApplication::update()
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
+}
+
+bool CGameApplication::initPhysics()
+{
+	CPhysics::getInstance().init();
+	//Add the Game Application
+	CPhysics::getInstance().getPhysicsWorld()->addContactListener(this);
+	return true;
 }
 
 bool CGameApplication::initInput()

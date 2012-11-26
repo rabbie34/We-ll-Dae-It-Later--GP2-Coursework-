@@ -29,6 +29,8 @@ public:
 	//find game object by name
 	CGameObject * findGameObject(const string& name);
 
+	void removeGameObject(CGameObject *pObject);
+
 	//clear
 	void clear();
 
