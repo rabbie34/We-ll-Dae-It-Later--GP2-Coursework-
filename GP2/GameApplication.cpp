@@ -91,9 +91,10 @@ bool CGameApplication::initGame()
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	pMaterial->loadEnvironmentTexture("ss6.dds");
+	//pMaterial->loadEnvironmentTexture("ss1.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
+	pTestGameObject->getTransform()->setScale(10.0f,10.0f,10.0f);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Creation of the players ship
