@@ -390,7 +390,7 @@ void CGameApplication::update()
 	if(gameplaying=true)
 	{
 		D3DXVECTOR3 direction = pTransform->getForward();
-		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
 
 	//Shoot when the player presses the mouse and play a sound
