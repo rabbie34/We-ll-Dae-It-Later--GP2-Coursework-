@@ -13,6 +13,9 @@
 #include "MeshComponent.h"
 
 #include "ModelLoader.h"
+#include "AudioSourceComponent.h"
+#include "AudioSystem.h"
+#include "AudioListenerComponent.h"
 
 //Physics
 #include "Physics.h"
@@ -34,6 +37,7 @@ private:
 	bool initGame();
 	bool initGraphics();
 	bool initPhysics();
+	bool initAudio();
 	bool initWindow();
 	void render();
 	void update();

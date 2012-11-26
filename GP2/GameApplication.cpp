@@ -56,6 +56,8 @@ bool CGameApplication::init()
 		return false;
 	if (!initPhysics())
 		return false;
+	if (!initAudio())
+		return false;
 	if (!initGame())
 		return false;
 	return true;
@@ -124,6 +126,16 @@ bool CGameApplication::initGame()
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
 	speed=8.0f;
 	rotSpeed=12.0f;
+
+	//Sounds for the player ship
+	CAudioSourceComponent *pAudio=new CAudioSourceComponent();
+	pAudio->setFilename("Thrust2.wav"); //If its a wav file, you should not stream
+	pAudio->setStream(false); //stream set to false
+	pTestGameObject->addComponent(pAudio); //Add it to the Game Object
+	CAudioSourceComponent *pLaser=new CAudioSourceComponent();
+	pLaser->setFilename("laser.wav");
+	pLaser->setStream(false);
+	pTestGameObject->addComponent(pLaser);
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -233,6 +245,18 @@ bool CGameApplication::initGame()
 	pCameraGameObject->addComponent(pCamera);
 	m_pGameObjectManager->addGameObject(pCameraGameObject);
 
+	//Audio listener for the camera and the game music
+	CAudioListenerComponent *pListener=new CAudioListenerComponent();
+	pCameraGameObject->addComponent(pListener);
+	CAudioSourceComponent *pMusic=new CAudioSourceComponent();
+	pMusic->setFilename("Jurassic Park.mp3");
+	pMusic->setStream(true);
+	pCameraGameObject->addComponent(pMusic);
+
+	//Play the game music and thruster sounds
+	pMusic->play(-1);
+	pAudio->play(-1);
+
 	//directional light for the whole scene
 	CGameObject *pLightGameObject=new CGameObject();
 	pLightGameObject->setName("DirectionalLight");
@@ -332,9 +356,10 @@ void CGameApplication::render()
 //Update method, most gameplay code in here
 void CGameApplication::update()
 {
-	//Used to update the game and physics simulation
+	//Used to update the game, physics simulation and audio
 	m_Timer.update();
 	CPhysics::getInstance().update(m_Timer.getElapsedTime());
+	CAudioSystem::getInstance().update();
 
 	//Variable used to get around editing more than one object at a time and game states.
 	bool gameplaying=true;
@@ -368,6 +393,15 @@ void CGameApplication::update()
 	{
 		D3DXVECTOR3 direction = pTransform->getForward();
 		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+	}
+
+	//Shoot when the player presses the mouse and play a sound
+	if (CInput::getInstance().getMouse()->getMouseDown(0))
+	{
+		//Audio - grab the audio component
+		CAudioSourceComponent * pLaser=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
+		//Audio - call play
+		pLaser->play();
 	}
 	
 	//Fly the up/down/left/right depending on they key pressed.
@@ -435,7 +469,13 @@ bool CGameApplication::initInput()
 	return true;
 }
 
-//initGraphics - initialise the graphics subsystem - BMD
+bool CGameApplication::initAudio()
+{
+	CAudioSystem::getInstance().init();
+	return true;
+}
+
+//initGraphics - initialise the graphics subsystem
 bool CGameApplication::initGraphics()
 {
 	//Retrieve the size of the window, this is need to match the
