@@ -91,7 +91,7 @@ bool CGameApplication::initGame()
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	//pMaterial->loadEnvironmentTexture("ss1.dds");
+	pMaterial->loadEnvironmentTexture("sb1.png");;
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
 	pTestGameObject->getTransform()->setScale(10.0f,10.0f,10.0f);
@@ -360,7 +360,7 @@ void CGameApplication::update()
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
 		CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
 		pCamera->setLookAt(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z);
-		pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y+4.0f,pTransform->getPosition().z-15.0f);
+		pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y+0.0f,pTransform->getPosition().z-15.0f);
 	}
 
 	//Moves the ship forward constantly
@@ -379,7 +379,7 @@ void CGameApplication::update()
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
-		pTransform->rotate(m_Timer.getElapsedTime()*2.0f,0.0f,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*1.0f,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
