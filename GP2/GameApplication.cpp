@@ -109,7 +109,7 @@ bool CGameApplication::initGame()
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
 	pMaterial->loadDiffuseTexture("buffShip_Diff.jpg");
 	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
-	//pMaterial->loadBumpTexture("armoredrecon_N.png");
+	pMaterial->loadBumpTexture("buffShip_Bump.png");
 	pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
 	pTestGameObject->addComponent(pMaterial);
 
@@ -305,7 +305,7 @@ void CGameApplication::update()
 	{
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		D3DXVECTOR3 forward = pTransform->getForward();
-		pTransform->translate(forward.x* m_Timer.getElapsedTime() * 5,forward.y* m_Timer.getElapsedTime() * 5,forward.z* m_Timer.getElapsedTime() * 5);
+		pTransform->translate(forward.x* m_Timer.getElapsedTime() * 10,forward.y* m_Timer.getElapsedTime() * 10,forward.z* m_Timer.getElapsedTime() * 10);
 	}
 
 	
@@ -484,7 +484,7 @@ bool CGameApplication::initGraphics()
 bool CGameApplication::initWindow()
 {
 	m_pWindow=new CWin32Window();
-	if (!m_pWindow->init(TEXT("Games Programming"),800,640,false))
+	if (!m_pWindow->init(TEXT("Games Programming"),800,800,false))
 		return false;
 	return true;
 }
