@@ -87,13 +87,14 @@ bool CGameApplication::initGame()
 	//Creation of Skybox/Skysphere
 	CGameObject *pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Sky");
-	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
+	//CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
+	CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,1.0f,1.0f,1.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	pMaterial->loadEnvironmentTexture("sb1.png");;
+	pMaterial->loadEnvironmentTexture("sb1.png");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
 	pTestGameObject->getTransform()->setScale(10.0f,10.0f,10.0f);
@@ -110,7 +111,7 @@ bool CGameApplication::initGame()
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
 	pMaterial->loadDiffuseTexture("buffShip_Diff.jpg");
 	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
-	pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
+	//pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
 	pTestGameObject->addComponent(pMaterial);
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
@@ -264,8 +265,8 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->init();
 
 	//Play the game music and thruster sounds
-	pMusic->play(-1);
-	pAudio->play(-1);
+	//pMusic->play(-1);
+	//pAudio->play(-1);
 	
 	m_Timer.start();
 	return true;
