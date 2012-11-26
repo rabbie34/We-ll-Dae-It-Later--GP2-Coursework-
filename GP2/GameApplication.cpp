@@ -1,12 +1,10 @@
 #include "GameApplication.h"
 #include "GameObject.h"
-
-
 #include "Input.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 
-
+//Constructor/Destructor
 CGameApplication::CGameApplication(void)
 {
 	m_pWindow=NULL;
@@ -63,6 +61,7 @@ bool CGameApplication::init()
 	return true;
 }
 
+//Collision Detection
 void CGameApplication::contactPointCallback (const hkpContactPointEvent &event)
 {
 	/*
@@ -76,13 +75,14 @@ void CGameApplication::contactPointCallback (const hkpContactPointEvent &event)
 	//Do something with the game objects*/
 }
 
+//Initialization of Objects
 bool CGameApplication::initGame()
 {
     // Set primitive topology, how are we going to interpet the vertices in the vertex buffer - BMD
     //http://msdn.microsoft.com/en-us/library/bb173590%28v=VS.85%29.aspx - BMD
     m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST );	
 
-	//Creation of the environment. 
+	//Creation of Skybox/Skysphere
 	CGameObject *pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Sky");
 	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
@@ -248,6 +248,7 @@ bool CGameApplication::initGame()
 	return true;
 }
 
+//Run method
 void CGameApplication::run()
 {
 	while(m_pWindow->running())
@@ -260,6 +261,7 @@ void CGameApplication::run()
 	}
 }
 
+//Rendered for drawing game objects
 void CGameApplication::render()
 {
     // Just clear the backbuffer, colours start at 0.0 to 1.0
@@ -326,89 +328,86 @@ void CGameApplication::render()
     m_pSwapChain->Present( 0, 0 );
 }
 
+//Update method, most gameplay code in here
 void CGameApplication::update()
 {
+	//Used to update the game and physics simulation
 	m_Timer.update();
-
 	CPhysics::getInstance().update(m_Timer.getElapsedTime());
 
-	D3DXVECTOR3 coords; //Variable to store the positon of the spaceship
-	D3DXVECTOR2 mouseCoords; //Variable to store the position of the mouse on screen.
-	bool gameplaying=true; //Variable used to get around editing more than one object at a time
+	//Variable used to get around editing more than one object at a time and game states.
+	bool gameplaying=true;
 
-	//rotates Objects in the scene
-	if(gameplaying=true){
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Earth")->getTransform();
-	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.05f);
-	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
-	pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.25f);
-	}
+	//Get the position of the ship to be used in various methods
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	//Rotate the ship back to its original position if no key is pressed
+	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
-	//make the camera follow the ship around the screen and rotates the ship back to its original position if no key is pressed.
+	//rotates Objects in the scene continuously.
 	if(gameplaying=true)
 	{
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	coords = pTransform->getPosition();
-	CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
-	pCamera->setLookAt(coords.x,coords.y,coords.z);
-	D3DXVECTOR3 forward = pTransform->getForward();
-	CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
-	pTransform2->setPosition(coords.x,coords.y+4.0f,coords.z-15.0f);
-	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
+		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
+		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.05f);
+
+		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
+		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.25f);
+	}
+
+	//make the camera follow the ship around the screen
+	if(gameplaying=true)
+	{
+		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
+		pCamera->setLookAt(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z);
+		pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y+4.0f,pTransform->getPosition().z-15.0f);
 	}
 
 	//Moves the ship forward constantly
 	if(gameplaying=true)
 	{
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 		D3DXVECTOR3 direction = pTransform->getForward();
-		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
 	
-	//Tilt the ship up and down
+	//Fly the up/down/left/right depending on they key pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
-	pTransform->rotate(m_Timer.getElapsedTime()*-2.0f,0.0f,0.0f);	
+		pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*-2.0f,0.0f,0.0f);	
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
-	pTransform->rotate(m_Timer.getElapsedTime()*2.0f,0.0f,0.0f);
+		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*2.0f,0.0f,0.0f);
 	}
-
-	//Tilt the ship left and right
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
-	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
+		pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
-	pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
-	pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
+		pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
-	//Increase and decrease the ship speed.
+	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_SPACE)))
 	{
 		if(speed<20.0f)
 		{
-		speed=speed+m_Timer.getElapsedTime()*5.0f;
-		rotSpeed=rotSpeed+m_Timer.getElapsedTime()*5.0f;
+			speed=speed+m_Timer.getElapsedTime()*5.0f;
+			rotSpeed=rotSpeed+m_Timer.getElapsedTime()*5.0f;
 		}
 	}
 	else
 	{
 		if(speed>8.0f)
 		{
-		speed=speed-m_Timer.getElapsedTime()*5.0f;
-		rotSpeed=rotSpeed-m_Timer.getElapsedTime()*5.0f;
+			speed=speed-m_Timer.getElapsedTime()*5.0f;
+			rotSpeed=rotSpeed-m_Timer.getElapsedTime()*5.0f;
 		}
+		//Ensures the speed can not go below its original value.
 		if(speed<8.0f)
 		{
 			speed=8.0f;
@@ -416,19 +415,11 @@ void CGameApplication::update()
 		}
 	}
 	
-	/*if(CInput::getInstance().getKeyboard()->isKeyUp((VK_SPACE)))
-	{
-		if(speed>5.0f)
-		{
-			speed=speed-0.05f;
-			rotSpeed=rotSpeed-0.1f;
-		}
-	}*/
-
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
 }
 
+//Initialization for physics, input, graphics and window.
 bool CGameApplication::initPhysics()
 {
 	CPhysics::getInstance().init();
@@ -442,7 +433,6 @@ bool CGameApplication::initInput()
 	CInput::getInstance().init();
 	return true;
 }
-
 
 //initGraphics - initialise the graphics subsystem - BMD
 bool CGameApplication::initGraphics()
