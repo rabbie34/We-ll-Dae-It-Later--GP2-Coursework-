@@ -120,13 +120,6 @@ bool CGameApplication::initGame()
 	pBox->enable();
 	pBox->physicsShape();
 	pTestGameObject->addComponent(pBox);
-	m_pGameObjectManager->addGameObject(pTestGameObject);
-
-	//Sets the ship speed and rotation
-	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
-	speed=8.0f;
-	rotSpeed=12.0f;
-
 	//Sounds for the player ship
 	CAudioSourceComponent *pAudio=new CAudioSourceComponent();
 	pAudio->setFilename("Thrust2.wav"); //If its a wav file, you should not stream
@@ -136,6 +129,12 @@ bool CGameApplication::initGame()
 	pLaser->setFilename("laser.wav");
 	pLaser->setStream(false);
 	pTestGameObject->addComponent(pLaser);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+
+	//Sets the ship speed and rotation
+	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
+	speed=8.0f;
+	rotSpeed=12.0f;
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -243,8 +242,6 @@ bool CGameApplication::initGame()
 	pCamera->setFarClip(1000.0f);
 	pCamera->setNearClip(0.1f);
 	pCameraGameObject->addComponent(pCamera);
-	m_pGameObjectManager->addGameObject(pCameraGameObject);
-
 	//Audio listener for the camera and the game music
 	CAudioListenerComponent *pListener=new CAudioListenerComponent();
 	pCameraGameObject->addComponent(pListener);
@@ -252,10 +249,7 @@ bool CGameApplication::initGame()
 	pMusic->setFilename("Jurassic Park.mp3");
 	pMusic->setStream(true);
 	pCameraGameObject->addComponent(pMusic);
-
-	//Play the game music and thruster sounds
-	pMusic->play(-1);
-	pAudio->play(-1);
+	m_pGameObjectManager->addGameObject(pCameraGameObject);
 
 	//directional light for the whole scene
 	CGameObject *pLightGameObject=new CGameObject();
@@ -268,6 +262,10 @@ bool CGameApplication::initGame()
 
 	//init, this must be called after we have created all game objects
 	m_pGameObjectManager->init();
+
+	//Play the game music and thruster sounds
+	pMusic->play(-1);
+	pAudio->play(-1);
 	
 	m_Timer.start();
 	return true;
