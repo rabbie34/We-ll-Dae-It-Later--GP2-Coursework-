@@ -111,12 +111,13 @@ bool CGameApplication::initGame()
 	pMaterial->loadDiffuseTexture("buffShip_Diff.jpg");
 	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
 	//pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
+	//pMaterial->loadBumpTexture("buffShip_Bump.png");
 	pTestGameObject->addComponent(pMaterial);
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	CBoxCollider *pBox=new CBoxCollider();
-	pBox->setExtents(1.0f,1.0f,1.0f);
+	pBox->setExtents(30.0f,10.0f,30.0f);
 	pBox->enable();
 	pBox->physicsShape();
 	pTestGameObject->addComponent(pBox);
@@ -130,11 +131,26 @@ bool CGameApplication::initGame()
 	pLaser->setStream(false);
 	pTestGameObject->addComponent(pLaser);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
-
+	
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
 	speed=8.0f;
 	rotSpeed=12.0f;
+
+
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("collider");
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,-20.0f);
+	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.createCube(m_pD3D10Device,pBox->getWidth(),pBox->getHeight(),pBox->getLength());
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -371,7 +387,7 @@ void CGameApplication::update()
 	if(gameplaying=true)
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
-		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.05f);
+		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.08f);
 
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
 		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.25f);
@@ -390,7 +406,7 @@ void CGameApplication::update()
 	if(gameplaying=true)
 	{
 		D3DXVECTOR3 direction = pTransform->getForward();
-		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
 
 	//Shoot when the player presses the mouse and play a sound
