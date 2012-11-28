@@ -368,14 +368,14 @@ void CGameApplication::update()
 	//pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
 	//rotates Objects in the scene continuously.
-	if(gameplaying=true)
+	/*if(gameplaying=true)
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
 		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.05f);
 
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
 		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.25f);
-	}
+	}*/
 
 	//make the camera follow the ship around the screen
 	if(gameplaying=true)
@@ -391,6 +391,7 @@ void CGameApplication::update()
 	{
 		//D3DXVECTOR3 direction = pTransform->getForward();
 		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		pTransform->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 	}
 
 	//Shoot when the player presses the mouse and play a sound
@@ -406,22 +407,22 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
-		pTransform->rotate(m_Timer.getElapsedTime()*-2.0f,0.0f,0.0f);	
+		pTransform->update(m_Timer.getElapsedTime());
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
-		pTransform->rotate(m_Timer.getElapsedTime()*1.0f,0.0f,0.0f);
+		//pTransform->rotate(m_Timer.getElapsedTime()*1.0f,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
+		//pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
+		//pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
