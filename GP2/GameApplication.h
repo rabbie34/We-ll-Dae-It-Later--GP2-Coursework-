@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include <D3D10.h>
 #include <D3DX10.h>
+#include <fmod.hpp>
 
 #include "GameObjectManager.h"
 
@@ -19,6 +20,7 @@
 
 //Physics
 #include "Physics.h"
+#include "BodyComponent.h"
 #include "BoxCollider.h"
 
 #include <vector>
@@ -60,7 +62,7 @@ private:
 	CGameObjectManager *m_pGameObjectManager;
 
 	CModelLoader modelloader;
-	D3DXVECTOR3 shipRot;
+	//D3DXVECTOR3 shipRot;
 	float speed;
 	float rotSpeed;
 };

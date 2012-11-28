@@ -132,7 +132,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Sets the ship speed and rotation
-	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
+	//shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
 	speed=8.0f;
 	rotSpeed=12.0f;
 
@@ -365,7 +365,7 @@ void CGameApplication::update()
 	//Get the position of the ship to be used in various methods
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
 	//Rotate the ship back to its original position if no key is pressed
-	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
+	//pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
 	//rotates Objects in the scene continuously.
 	if(gameplaying=true)
@@ -389,8 +389,8 @@ void CGameApplication::update()
 	//Moves the ship forward constantly
 	if(gameplaying=true)
 	{
-		D3DXVECTOR3 direction = pTransform->getForward();
-		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		//D3DXVECTOR3 direction = pTransform->getForward();
+		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
 
 	//Shoot when the player presses the mouse and play a sound
