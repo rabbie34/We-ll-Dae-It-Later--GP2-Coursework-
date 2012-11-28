@@ -208,7 +208,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Space Station
-	/*pTestGameObject=new CGameObject();
+	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Station");
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,30.0f);
 	pTestGameObject->getTransform()->setRotation(1.6f,0.0f,1.6f);
@@ -223,7 +223,7 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"station.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Creation and positioning of the camera
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
@@ -264,8 +264,8 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->init();
 
 	//Play the game music and thruster sounds
-	//pMusic->play(-1);
-	//pAudio->play(-1);
+	pMusic->play(-1);
+	pAudio->play(-1);
 	
 	m_Timer.start();
 	return true;
@@ -371,10 +371,10 @@ void CGameApplication::update()
 	if(gameplaying=true)
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
-		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.05f);
+		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.05f);
 
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
-		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.25f);
+		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.25f);
 	}
 
 	//make the camera follow the ship around the screen
