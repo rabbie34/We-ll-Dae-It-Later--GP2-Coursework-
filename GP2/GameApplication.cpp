@@ -88,8 +88,8 @@ bool CGameApplication::initGame()
 	//Creation of Skybox/Skysphere
 	CGameObject *pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Sky");
-	//CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
-	CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,1.0f,1.0f,1.0f);
+	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
+	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,2.0f,2.0f,2.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial=new CMaterialComponent();
@@ -118,7 +118,7 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	CBoxCollider *pBox=new CBoxCollider();
-	pBox->setExtents(30.0f,10.0f,30.0f);
+	pBox->setExtents(5.2f,1.8f,5.2f);
 	pBox->enable();
 	pBox->physicsShape();
 	pTestGameObject->addComponent(pBox);
@@ -137,21 +137,6 @@ bool CGameApplication::initGame()
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
 	speed=8.0f;
 	rotSpeed=12.0f;
-
-
-	pTestGameObject=new CGameObject();
-	pTestGameObject->setName("collider");
-	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,-20.0f);
-	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
-	pMaterial=new CMaterialComponent();
-	pMaterial->SetRenderingDevice(m_pD3D10Device);
-	pMaterial->setEffectFilename("Parallax.fx");
-	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
-	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.createCube(m_pD3D10Device,pBox->getWidth(),pBox->getHeight(),pBox->getLength());
-	pMesh->SetRenderingDevice(m_pD3D10Device);
-	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Planet Earth
 	pTestGameObject=new CGameObject();
@@ -223,6 +208,11 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pBox=new CBoxCollider();
+	pBox->setExtents(10.0f,10.0f,2.0f);
+	pBox->enable();
+	pBox->physicsShape();
+	pTestGameObject->addComponent(pBox);
 
 	//Space Station
 	pTestGameObject=new CGameObject();
