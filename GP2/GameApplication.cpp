@@ -274,7 +274,7 @@ bool CGameApplication::initGame()
 
 	//Play the game music and thruster sounds
 	pMusic->play(-1);
-	pAudio->play(-1);
+	//pAudio->play(-1);
 	
 	m_Timer.start();
 	return true;
@@ -449,6 +449,8 @@ void CGameApplication::update()
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_SPACE) || CInput::getInstance().getJoypad(0)->getLeftTrigger()>0.5)
 	{
+		CAudioSourceComponent * pAudio=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
+		pAudio->play(-1);
 		if(speed<500.0f)
 		{
 			speed=speed+m_Timer.getElapsedTime()*15.0f;
