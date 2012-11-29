@@ -63,4 +63,5 @@ private:
 	D3DXVECTOR3 shipRot;
 	float speed;
 	float rotSpeed;
+	float audioTimer;
 };

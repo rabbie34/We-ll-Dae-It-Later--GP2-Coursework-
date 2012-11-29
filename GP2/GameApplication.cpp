@@ -15,6 +15,8 @@ CGameApplication::CGameApplication(void)
 	m_pDepthStencelView=NULL;
 	m_pDepthStencilTexture=NULL;
 	m_pGameObjectManager=new CGameObjectManager();
+
+	
 }
 
 CGameApplication::~CGameApplication(void)
@@ -175,7 +177,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Asteroid
-	/*pTestGameObject=new CGameObject();
+	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Asteroid");
 	pTestGameObject->getTransform()->setPosition(5.0f,0.0f,0.0f);
 	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
@@ -190,7 +192,7 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Space Gate
 	pTestGameObject=new CGameObject();
@@ -379,6 +381,7 @@ void CGameApplication::update()
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
 		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.08f);
+		pTransform2->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
 		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.25f);
@@ -399,16 +402,26 @@ void CGameApplication::update()
 		D3DXVECTOR3 direction = pTransform->getForward();
 		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
-
+	
 	//Shoot when the player presses the mouse and play a sound
-	if (CInput::getInstance().getMouse()->getMouseDown(0))
+	if (CInput::getInstance().getMouse()->getMouseDown(0)|| CInput::getInstance().getJoypad(0)->getRightTrigger()>0)
 	{
 		//Audio - grab the audio component
 		CAudioSourceComponent * pLaser=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
 		//Audio - call play
-		pLaser->play();
+		if (audioTimer < 0.0f)
+		{
+			pLaser->play();
+			audioTimer = 0.4f;
+		}
+		
 	}
-	
+
+	if (audioTimer >= 0)
+	{
+		audioTimer-=m_Timer.getElapsedTime();
+	}
+
 	CInput::getInstance().getJoypad(0)->update();
 
 	//Fly the up/down/left/right depending on they key pressed.
@@ -434,12 +447,12 @@ void CGameApplication::update()
 	}
 
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
-	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_SPACE)))
+	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_SPACE) || CInput::getInstance().getJoypad(0)->getLeftTrigger()>0.5)
 	{
-		if(speed<20.0f)
+		if(speed<500.0f)
 		{
-			speed=speed+m_Timer.getElapsedTime()*5.0f;
-			rotSpeed=rotSpeed+m_Timer.getElapsedTime()*5.0f;
+			speed=speed+m_Timer.getElapsedTime()*15.0f;
+			rotSpeed=rotSpeed+m_Timer.getElapsedTime()*15.0f;
 		}
 	}
 	else
