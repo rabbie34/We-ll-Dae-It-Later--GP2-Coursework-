@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Joypad.h"
 
 //Constructor/Destructor
 CGameApplication::CGameApplication(void)
@@ -406,7 +407,7 @@ void CGameApplication::update()
 	if(gameplaying=true)
 	{
 		D3DXVECTOR3 direction = pTransform->getForward();
-		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	}
 
 	//Shoot when the player presses the mouse and play a sound
@@ -418,23 +419,25 @@ void CGameApplication::update()
 		pLaser->play();
 	}
 	
+	CInput::getInstance().getJoypad(0)->update();
+
 	//Fly the up/down/left/right depending on they key pressed.
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W') || CInput::getInstance().getJoypad(0)->getLeftThumbStickY()<-12000)
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
 		pTransform->rotate(m_Timer.getElapsedTime()*-2.0f,0.0f,0.0f);	
 	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S') || CInput::getInstance().getJoypad(0)->getLeftThumbStickY()>12000)
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
 		pTransform->rotate(m_Timer.getElapsedTime()*1.0f,0.0f,0.0f);
 	}
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D') || CInput::getInstance().getJoypad(0)->getLeftThumbStickX()>12000)
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
 	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A') || CInput::getInstance().getJoypad(0)->getLeftThumbStickX()<-12000)
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	

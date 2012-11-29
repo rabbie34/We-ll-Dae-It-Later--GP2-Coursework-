@@ -1,16 +1,39 @@
 #include "Joypad.h"
 #include <math.h>
 
+CJoypad::CJoypad()
+{
+	m_iIndex=0;
+	ZeroMemory( &m_JoypadState, sizeof(XINPUT_STATE) );
+}
+
 CJoypad::CJoypad(int index)
 {
 	m_iIndex=index;
 	ZeroMemory( &m_JoypadState, sizeof(XINPUT_STATE) );
+	m_fLeftThumbstickX=0.0f;
+	m_fLeftThumbstickY=0.0f;
+	m_fLeftThumbstickXNormalized=0.0f;
+	m_fLeftThumbstickYNormalized=0.0f;
+	m_fLeftMagnitude=0.0f;
+	m_fLeftNormalizedMagnitude=0.0f;
+
+	m_fRightThumbstickX=0.0f;
+	m_fRightThumbstickY=0.0f;
+	m_fRightThumbstickXNormalized=0.0f;
+	m_fRightThumbstickYNormalized=0.0f;
+	m_fRightMagnitude=0.0f;
+	m_fRightNormalizedMagnitude=0.0f;
 }
 
 CJoypad::~CJoypad()
 {
 }
 
+bool CJoypad::isButtonPressed(int buttonCode)
+{
+	return m_JoypadState.Gamepad.wButtons & buttonCode;
+}
 void CJoypad::update()
 {
 	ZeroMemory( &m_JoypadState, sizeof(XINPUT_STATE) );

@@ -6,6 +6,7 @@
 class CJoypad
 {
 public:
+	CJoypad();
 	CJoypad(int index);
 	~CJoypad();
 
@@ -30,6 +31,18 @@ public:
 	{
 		return m_fRightThumbstickY;
 	};
+
+	float getLeftTrigger()
+	{
+		return m_fLeftTrigger;
+	};
+
+	float getRightTrigger()
+	{
+		return m_fRightTrigger;
+	};
+
+	bool isButtonPressed(int buttonCode);
 private:
 	XINPUT_STATE m_JoypadState;
 	int m_iIndex;
