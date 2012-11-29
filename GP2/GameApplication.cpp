@@ -66,13 +66,21 @@ bool CGameApplication::init()
 //Collision Detection
 void CGameApplication::contactPointCallback (const hkpContactPointEvent &event)
 {
-	/*
+	
 	//Called when a collision occurs
 	hkpRigidBody *pBody1=event.getBody(0);
 	hkpRigidBody *pBody2=event.getBody(1);
 
 	CGameObject *pGameObject1=(CGameObject*)pBody1->getUserData();
 	CGameObject *pGameObject2=(CGameObject*)pBody2->getUserData();
+
+	if(pGameObject1->getName().compare("player"))
+	{
+		if(pGameObject2->getName().compare("Gate"))
+		{
+			pGameObject1->getTransform()->translate(0,0,-20);
+		}
+	}
 
 	//Do something with the game objects*/
 }
@@ -115,11 +123,16 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	CBoxCollider *pBox=new CBoxCollider();
-	pBox->setExtents(1.0f,1.0f,1.0f);
-	pBox->enable();
-	pBox->physicsShape();
+	CBoxCollider * pBox = new CBoxCollider();
+
+
 	pTestGameObject->addComponent(pBox);
+	CBodyComponent * pBody = new CBodyComponent();
+	
+	pTestGameObject->addComponent(pBody);
+	//pBody->init();
+	
+	
 	//Sounds for the player ship
 	CAudioSourceComponent *pAudio=new CAudioSourceComponent();
 	pAudio->setFilename("Thrust2.wav"); //If its a wav file, you should not stream
@@ -206,6 +219,7 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
+	
 
 	//Space Station
 	pTestGameObject=new CGameObject();
@@ -363,7 +377,7 @@ void CGameApplication::update()
 	bool gameplaying=true;
 
 	//Get the position of the ship to be used in various methods
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	CTransformComponent * pTransform= m_pGameObjectManager->findGameObject("player")->getTransform();
 	//Rotate the ship back to its original position if no key is pressed
 	//pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 

@@ -2,6 +2,9 @@
 
 #include "IComponent.h"
 
+#include "BodyComponent.h"
+#include "GameObject.h"
+
 #include <D3D10.h>
 #include <D3DX10.h>
 
@@ -93,6 +96,11 @@ public:
 		m_vecRotation.x+=x;
 		m_vecRotation.y+=y;
 		m_vecRotation.z+=z;
+		CBodyComponent *pBody=(CBodyComponent*)this->getParent()->getComponent("BodyComponent");
+		if (pBody)
+		{
+			//pBody->getRigidBody()->setRotation(
+		}
 	};
 
 	//translate
@@ -101,6 +109,11 @@ public:
 		m_vecPosition.x+=x;
 		m_vecPosition.y+=y;
 		m_vecPosition.z+=z;
+		CBodyComponent *pBody=(CBodyComponent*)this->getParent()->getComponent("BodyComponent");
+		if (pBody)
+		{
+			pBody->getRigidBody()->setPosition(hkVector4(m_vecPosition.x,m_vecPosition.y,m_vecPosition.z));
+		}
 	};
 
 	//scale
