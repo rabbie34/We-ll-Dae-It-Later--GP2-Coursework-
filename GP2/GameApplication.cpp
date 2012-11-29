@@ -4,6 +4,7 @@
 
 #include "Input.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 	 
 // we're not using any product apart from Havok Physics.
@@ -82,14 +83,14 @@ bool CGameApplication::initGame()
 	CGameObject *pTestGameObject=new CGameObject();
 	//Set the name
 	pTestGameObject->setName("Sky");
-	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
-	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
+	//CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
+	CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,10.0f,10.0f,10.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	pMaterial->loadEnvironmentTexture("Mars.dds");
+	pMaterial->loadEnvironmentTexture("skybox_front5.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
 	//add the game object
@@ -270,6 +271,12 @@ void CGameApplication::update()
 {
 	m_Timer.update();
 
+	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+
+	CMouse * mouse = CInput::getInstance().getMouse();
+	pTransform->rotate(mouse->getRelativeMouseY()*m_Timer.getElapsedTime(),mouse->getRelativeMouseX()*m_Timer.getElapsedTime(),0);
+	
+
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		//play sound
@@ -309,8 +316,8 @@ void CGameApplication::update()
 	}
 
 	
-	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
+	//CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+	//pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
 	D3DXVECTOR3 coords = pTransform->getPosition();
 	//D3DXVECTOR3 forward = pTransform->getForward();
 	//CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();

@@ -9,8 +9,8 @@ TextureCube envMap;
 SamplerState wrapSampler
 {
     Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = Clamp;
-    AddressV = Clamp;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 struct VS_INPUT
@@ -21,7 +21,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
 	float4 pos:SV_POSITION;
-	float3 texCoord:TEXCOORD0;	
+	float3 texCoord:TEXCOORD0;
 };
 
 PS_INPUT VS(VS_INPUT input)
@@ -30,8 +30,8 @@ PS_INPUT VS(VS_INPUT input)
 	
 	float4x4 matViewProjection=mul(matView,matProjection);
 	
-	output.pos=mul(input.pos+cameraPosition,matViewProjection);
-	output.texCoord=normalize(input.pos.xyz);
+	output.pos=mul(input.pos,matViewProjection);
+	output.texCoord=input.pos.xyz;
 	return output;
 }
 
