@@ -5,17 +5,10 @@
   </head>
   <body class="window">
     <div id="title_bar">
-      <span id="title">SPACE: BECAUSE ITS EASIER THAN LAND ...</span>
+      <span id="title">MAIN GAMEYGAME.</span>
     </div>
-    <div id="window">
       <div id="content">
-        Press G to start the GameyGame!
+        SCORE
       </div>
-      <div id="button">
-        <div id="content">
-          Start
-          </div>
-        </div>
-    </div>
   </body>
 </template>

@@ -67,6 +67,9 @@ private:
 	CModelLoader modelloader;
 
 	Rocket::Core::ElementDocument *m_pMainMenu;
+	Rocket::Core::ElementDocument *m_pGameGUI;
+	Rocket::Core::ElementDocument *m_pPauseGUI;
+
 	GameState m_GameState;
 	//Need one for every screen
 };

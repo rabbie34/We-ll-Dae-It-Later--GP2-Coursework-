@@ -5,11 +5,11 @@
   </head>
   <body class="window">
     <div id="title_bar">
-      <span id="title">SPACE: BECAUSE ITS EASIER THAN LAND ...</span>
+      <span id="title">GAME PAUSED ...</span>
     </div>
     <div id="window">
       <div id="content">
-        Press G to start the GameyGame!
+        YOUVE PAUSED THE GAMEYGAME NOW YOURE STUCK!
       </div>
       <div id="button">
         <div id="content">

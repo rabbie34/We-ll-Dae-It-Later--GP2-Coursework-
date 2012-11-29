@@ -229,5 +229,11 @@
     <None Include="window.rml">
       <Filter>GUI Files</Filter>
     </None>
+    <None Include="GameGUI.rml">
+      <Filter>GUI Files</Filter>
+    </None>
+    <None Include="PauseGUI.rml">
+      <Filter>GUI Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

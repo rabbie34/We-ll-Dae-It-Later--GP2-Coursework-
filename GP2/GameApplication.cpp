@@ -217,6 +217,8 @@ void CGameApplication::initMainMenu()
 
 
 	m_pMainMenu=CGUIManager::getInstance().loadGUI("mainMenu.rml");
+	m_pGameGUI=CGUIManager::getInstance().loadGUI("GameGUI.rml");
+	m_pPauseGUI=CGUIManager::getInstance().loadGUI("PauseGUI.rml");
 	m_pMainMenu->Show();
 
 	//init, this must be called after we have created all game objects
@@ -322,11 +324,12 @@ void CGameApplication::render()
 
 void CGameApplication::updateMainGame()
 {
+	m_pGameGUI->Show();
 
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		//play sound
-		m_pMainMenu->Hide();
+		//m_pMainMenu->Hide();
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(m_Timer.getElapsedTime(),0.0f,0.0f);
 	}
@@ -342,11 +345,18 @@ void CGameApplication::updateMainGame()
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime(),0.0f);
 	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
+
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		//play sound
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
+	}
+	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'P'))
+	{
+		m_pGameGUI->Hide();
+		m_GameState=PAUSE;
+		m_pPauseGUI->Show();
 	}
 }
 

@@ -130,8 +130,10 @@
     <None Include="diffuse.fx" />
     <None Include="DirectionalLight.fx" />
     <None Include="Environment.fx" />
+    <None Include="GameGUI.rml" />
     <None Include="mainMenu.rml" />
     <None Include="Parallax.fx" />
+    <None Include="PauseGUI.rml" />
     <None Include="ScreenSpace.fx" />
     <None Include="Specular.fx" />
     <None Include="Texture.fx" />
