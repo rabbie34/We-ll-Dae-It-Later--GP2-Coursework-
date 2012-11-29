@@ -412,17 +412,17 @@ void CGameApplication::update()
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*-rotSpeed,0.0f);
-		//pTransform->rotate(m_Timer.getElapsedTime()*1.0f,0.0f,0.0f);
+		pTransform->rotate(m_Timer.getElapsedTime()*1.0f,0.0f,0.0f);
 	}
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
-		//pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
-		//pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
+		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
