@@ -96,11 +96,11 @@ public:
 		m_vecRotation.x+=x;
 		m_vecRotation.y+=y;
 		m_vecRotation.z+=z;
-		CBodyComponent *pBody=(CBodyComponent*)this->getParent()->getComponent("BodyComponent");
-		if (pBody)
-		{
-			//pBody->getRigidBody()->setRotation(
-		}
+		//CBodyComponent *pBody=(CBodyComponent*)this->getParent()->getComponent("BodyComponent");
+		//if (pBody)
+		//{
+			//pBody->getRigidBody()->setRotation(hkQuaternion(m_vecRotation.x,m_vecRotation.y,m_vecRotation.z,0));
+		//}
 	};
 
 	//translate

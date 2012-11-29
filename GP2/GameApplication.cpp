@@ -124,6 +124,7 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	CBoxCollider * pBox = new CBoxCollider();
+	pBox->init();
 
 
 	pTestGameObject->addComponent(pBox);
@@ -219,6 +220,14 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pBox = new CBoxCollider();
+	pBox->init();
+
+
+	pTestGameObject->addComponent(pBox);
+	pBody = new CBodyComponent();
+	
+	pTestGameObject->addComponent(pBody);
 	
 
 	//Space Station
