@@ -274,7 +274,7 @@ void CGameApplication::update()
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 
 	CMouse * mouse = CInput::getInstance().getMouse();
-	pTransform->rotate(mouse->getRelativeMouseY()*m_Timer.getElapsedTime(),mouse->getRelativeMouseX()*m_Timer.getElapsedTime(),0);
+	//pTransform->rotate(mouse->getRelativeMouseY()*m_Timer.getElapsedTime(),mouse->getRelativeMouseX()*m_Timer.getElapsedTime(),0);
 	
 
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
@@ -317,7 +317,7 @@ void CGameApplication::update()
 
 	
 	//CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-	//pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
+	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
 	D3DXVECTOR3 coords = pTransform->getPosition();
 	//D3DXVECTOR3 forward = pTransform->getForward();
 	//CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();

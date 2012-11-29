@@ -30,8 +30,8 @@ PS_INPUT VS(VS_INPUT input)
 	
 	float4x4 matViewProjection=mul(matView,matProjection);
 	
-	output.pos=mul(input.pos,matViewProjection);
-	output.texCoord=input.pos.xyz;
+	output.pos=mul(input.pos+cameraPosition,matViewProjection);
+	output.texCoord=normalize(input.pos.xyz);
 	return output;
 }
 
