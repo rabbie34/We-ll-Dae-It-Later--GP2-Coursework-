@@ -20,6 +20,14 @@
 
 using namespace std;
 
+enum GameState
+{
+	MAINMENU,
+	GAME,
+	PAUSE,
+	EXIT
+};
+
 class CGameApplication
 {
 public:
@@ -35,6 +43,12 @@ private:
 	bool initWindow();
 	void render();
 	void update();
+	
+	void initMainGame();
+	void initMainMenu();
+
+	void updateMainGame();
+	void updateMainMenu();
 private:
 	//Graphics
 	ID3D10Device * m_pD3D10Device;
@@ -51,4 +65,8 @@ private:
 	CGameObjectManager *m_pGameObjectManager;
 
 	CModelLoader modelloader;
+
+	Rocket::Core::ElementDocument *m_pMainMenu;
+	GameState m_GameState;
+	//Need one for every screen
 };

@@ -441,10 +441,14 @@ void RenderInterfaceDirectX10::ReleaseTexture(Rocket::Core::TextureHandle textur
 {
 	//clean up after ourselves
 	RocketD3D10Texture * pTexture=(RocketD3D10Texture*)texture_handle;
-	pTexture->texture2D->Release();
-	pTexture->textureView->Release();
-
-	delete pTexture;
+	if (pTexture){
+		if (pTexture->texture2D){
+			pTexture->texture2D->Release();
+			pTexture->texture2D=NULL;
+		}
+		delete pTexture;
+		pTexture=NULL;
+	}
 }
 
 // Returns the native horizontal texel offset for the renderer.

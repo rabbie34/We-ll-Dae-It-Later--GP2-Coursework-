@@ -52,6 +52,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{daa59041-b037-4d1c-b219-2cb75edf5aa0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI Files">
+      <UniqueIdentifier>{e2c3bb56-e6a0-4694-89ac-48f0f1507f6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -219,6 +222,12 @@
     </None>
     <None Include="Environment.fx">
       <Filter>Effects</Filter>
+    </None>
+    <None Include="mainMenu.rml">
+      <Filter>GUI Files</Filter>
+    </None>
+    <None Include="window.rml">
+      <Filter>GUI Files</Filter>
     </None>
   </ItemGroup>
 </Project>
