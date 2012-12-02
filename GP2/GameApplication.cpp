@@ -4,6 +4,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Joypad.h"
+#include <ctime>
 
 //Constructor/Destructor
 CGameApplication::CGameApplication(void)
@@ -277,6 +278,7 @@ bool CGameApplication::initGame()
 	//pAudio->play(-1);
 
 	score=0; //set the player score at the start to 0
+	srand((unsigned)time(0));
 	
 	m_Timer.start();
 	return true;
@@ -383,7 +385,7 @@ void CGameApplication::update()
 	if(gameplaying=true)
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
-		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.08f);
+		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.10f);
 		pTransform2->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
@@ -470,6 +472,8 @@ void CGameApplication::update()
 		}
 	}
 
+	float random = RandomFloat ((pTransform->getPosition().x-20.0f),(pTransform->getPosition().x+20.0f));
+
 	//Collision detection method
 	if(gameplaying=true){
 		
@@ -482,14 +486,14 @@ void CGameApplication::update()
 				if(pTransform->getPosition().z>pTransform2->getPosition().z+6.0f && pTransform->getPosition().z<pTransform2->getPosition().z+7.0f )
 				{
 				//if the player passes through the gate then move it forward to a random position and increase the score depending on their speed
-				pTransform2->setPosition(pTransform2->getPosition().x,pTransform2->getPosition().y,pTransform2->getPosition().z+80.0f);
+				pTransform2->setPosition(random,pTransform2->getPosition().y,pTransform2->getPosition().z+80.0f);
 				if(speed<=8.0f)
 				{
-				score=score+10;
+					score=score+10;
 				}
 				else
 				{
-				score=score+20;
+					score=score+20;
 				}
 				}
 			}

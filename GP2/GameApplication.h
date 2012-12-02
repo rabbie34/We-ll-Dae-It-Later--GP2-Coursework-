@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include <D3D10.h>
 #include <D3DX10.h>
+#include <ctime>
 
 #include "GameObjectManager.h"
 
@@ -65,4 +66,12 @@ private:
 	float rotSpeed;
 	float audioTimer;
 	int score;
+
+	float RandomFloat(float a, float b) 
+	{
+    float random = ((float) rand()) / (float) RAND_MAX;
+    float diff = b - a;
+    float r = random * diff;
+    return a + r;
+	}
 };
