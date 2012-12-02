@@ -96,11 +96,12 @@ public:
 		m_vecRotation.x+=x;
 		m_vecRotation.y+=y;
 		m_vecRotation.z+=z;
-		//CBodyComponent *pBody=(CBodyComponent*)this->getParent()->getComponent("BodyComponent");
-		//if (pBody)
-		//{
-			//pBody->getRigidBody()->setRotation(hkQuaternion(m_vecRotation.x,m_vecRotation.y,m_vecRotation.z,0));
-		//}
+		D3DXQuaternionRotationYawPitchRoll(&m_quatRotation,m_vecRotation.y,m_vecRotation.x,m_vecRotation.z);
+		CBodyComponent *pBody=(CBodyComponent*)this->getParent()->getComponent("BodyComponent");
+		if (pBody)
+		{
+			pBody->getRigidBody()->setRotation(hkQuaternion(m_quatRotation.x,m_quatRotation.y,m_quatRotation.z,m_quatRotation.w));
+		}
 	};
 
 	//translate

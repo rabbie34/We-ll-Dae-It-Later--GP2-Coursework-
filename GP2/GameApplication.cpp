@@ -74,13 +74,9 @@ void CGameApplication::contactPointCallback (const hkpContactPointEvent &event)
 	CGameObject *pGameObject1=(CGameObject*)pBody1->getUserData();
 	CGameObject *pGameObject2=(CGameObject*)pBody2->getUserData();
 
-	if(pGameObject1->getName().compare("player"))
-	{
-		if(pGameObject2->getName().compare("Gate"))
-		{
-			pGameObject1->getTransform()->translate(0,0,-20);
-		}
-	}
+	pGameObject1->getTransform()->translate(0,0,-20);
+	pGameObject2->getTransform()->translate(0,0,-20);
+	
 
 	//Do something with the game objects*/
 }
@@ -124,14 +120,13 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	CBoxCollider * pBox = new CBoxCollider();
-	pBox->init();
 
 
 	pTestGameObject->addComponent(pBox);
 	CBodyComponent * pBody = new CBodyComponent();
 	
 	pTestGameObject->addComponent(pBody);
-	//pBody->init();
+	pBody->init();
 	
 	
 	//Sounds for the player ship
@@ -221,13 +216,13 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 	pBox = new CBoxCollider();
-	pBox->init();
 
 
 	pTestGameObject->addComponent(pBox);
 	pBody = new CBodyComponent();
 	
 	pTestGameObject->addComponent(pBody);
+	pBody->init();
 	
 
 	//Space Station
@@ -430,7 +425,7 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
-		pTransform->update(m_Timer.getElapsedTime());
+		pTransform->rotate(m_Timer.getElapsedTime()*-1.0f,0.0f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
 	{
@@ -447,6 +442,9 @@ void CGameApplication::update()
 		pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
+
+	pTransform->rotate(-pTransform->getRotation().x*m_Timer.getElapsedTime()*5,-pTransform->getRotation().y*m_Timer.getElapsedTime()*5,-pTransform->getRotation().z*m_Timer.getElapsedTime()*5);
+	//pTransform->getParent()->getComponent("BodyComponent")->update(m_Timer.getElapsedTime());
 
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown((VK_SPACE)))
