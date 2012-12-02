@@ -275,6 +275,8 @@ bool CGameApplication::initGame()
 	//Play the game music and thruster sounds
 	pMusic->play(-1);
 	//pAudio->play(-1);
+
+	score=0; //set the player score at the start to 0
 	
 	m_Timer.start();
 	return true;
@@ -447,18 +449,18 @@ void CGameApplication::update()
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_SPACE) || CInput::getInstance().getJoypad(0)->getLeftTrigger()>0.5)
 	{
-		if(speed<500.0f)
+		if(speed<35.0f)
 		{
-			speed=speed+m_Timer.getElapsedTime()*15.0f;
-			rotSpeed=rotSpeed+m_Timer.getElapsedTime()*15.0f;
+			speed=speed+m_Timer.getElapsedTime()*10.0f;
+			rotSpeed=rotSpeed+m_Timer.getElapsedTime()*10.0f;
 		}
 	}
 	else
 	{
 		if(speed>8.0f)
 		{
-			speed=speed-m_Timer.getElapsedTime()*5.0f;
-			rotSpeed=rotSpeed-m_Timer.getElapsedTime()*5.0f;
+			speed=speed-m_Timer.getElapsedTime()*10.0f;
+			rotSpeed=rotSpeed-m_Timer.getElapsedTime()*10.0f;
 		}
 		//Ensures the speed can not go below its original value.
 		if(speed<8.0f)
@@ -471,17 +473,32 @@ void CGameApplication::update()
 	//Collision detection method
 	if(gameplaying=true){
 		
-		//Check Collisions with the space gates
+		//Get the co-ordinates of the space gate and check to see if the ship passes through it.
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
 		if(pTransform->getPosition().y<=pTransform2->getPosition().y+4.0f && pTransform->getPosition().y>=pTransform2->getPosition().y-4.0f)
 		{
 			if(pTransform->getPosition().x<=pTransform2->getPosition().x+3.5f && pTransform->getPosition().x>=pTransform2->getPosition().x-3.5f)
 			{
-				if(pTransform->getPosition().z>pTransform2->getPosition().z+8.0f)
+				if(pTransform->getPosition().z>pTransform2->getPosition().z+6.0f && pTransform->getPosition().z<pTransform2->getPosition().z+7.0f )
 				{
-				pTransform2->setPosition(pTransform2->getPosition().x,pTransform2->getPosition().y,pTransform2->getPosition().z+40.0f);
+				//if the player passes through the gate then move it forward to a random position and increase the score depending on their speed
+				pTransform2->setPosition(pTransform2->getPosition().x,pTransform2->getPosition().y,pTransform2->getPosition().z+80.0f);
+				if(speed<=8.0f)
+				{
+				score=score+10;
+				}
+				else
+				{
+				score=score+20;
+				}
 				}
 			}
+		}
+		
+		//If the ship missed the space gate then move the space gate anyway
+		if(pTransform->getPosition().z>pTransform2->getPosition().z+20.0f)
+		{
+			pTransform2->setPosition(pTransform2->getPosition().x,pTransform2->getPosition().y,pTransform2->getPosition().z+160.0f);
 		}
 	}
 

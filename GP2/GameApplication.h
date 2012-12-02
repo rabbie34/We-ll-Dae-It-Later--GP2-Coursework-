@@ -64,4 +64,5 @@ private:
 	float speed;
 	float rotSpeed;
 	float audioTimer;
+	int score;
 };
