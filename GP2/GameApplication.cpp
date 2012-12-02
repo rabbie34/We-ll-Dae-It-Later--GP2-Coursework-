@@ -177,7 +177,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Asteroid
-	pTestGameObject=new CGameObject();
+	/*pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Asteroid");
 	pTestGameObject->getTransform()->setPosition(5.0f,0.0f,0.0f);
 	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
@@ -192,7 +192,7 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
 	//Space Gate
 	pTestGameObject=new CGameObject();
@@ -363,10 +363,11 @@ void CGameApplication::render()
 //Update method, most gameplay code in here
 void CGameApplication::update()
 {
-	//Used to update the game, physics simulation and audio
+	//Used to update the game, physics simulation, audio and joypad input.
 	m_Timer.update();
 	CPhysics::getInstance().update(m_Timer.getElapsedTime());
 	CAudioSystem::getInstance().update();
+	CInput::getInstance().getJoypad(0)->update();
 
 	//Variable used to get around editing more than one object at a time and game states.
 	bool gameplaying=true;
@@ -406,9 +407,7 @@ void CGameApplication::update()
 	//Shoot when the player presses the mouse and play a sound
 	if (CInput::getInstance().getMouse()->getMouseDown(0)|| CInput::getInstance().getJoypad(0)->getRightTrigger()>0)
 	{
-		//Audio - grab the audio component
 		CAudioSourceComponent * pLaser=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
-		//Audio - call play
 		if (audioTimer < 0.0f)
 		{
 			pLaser->play();
@@ -416,15 +415,14 @@ void CGameApplication::update()
 		}
 		
 	}
-
+	
+	//Ensures the sound is not played too often.
 	if (audioTimer >= 0)
 	{
 		audioTimer-=m_Timer.getElapsedTime();
 	}
 
-	CInput::getInstance().getJoypad(0)->update();
-
-	//Fly the up/down/left/right depending on they key pressed.
+	//Fly the up/down/left/right depending on they key pressed or the direction of the joystick.
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W') || CInput::getInstance().getJoypad(0)->getLeftThumbStickY()<-12000)
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
@@ -449,8 +447,6 @@ void CGameApplication::update()
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_SPACE) || CInput::getInstance().getJoypad(0)->getLeftTrigger()>0.5)
 	{
-		CAudioSourceComponent * pAudio=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
-		pAudio->play(-1);
 		if(speed<500.0f)
 		{
 			speed=speed+m_Timer.getElapsedTime()*15.0f;
@@ -471,6 +467,24 @@ void CGameApplication::update()
 			rotSpeed=12.0f;
 		}
 	}
+
+	//Collision detection method
+	if(gameplaying=true){
+		
+		//Check Collisions with the space gates
+		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
+		if(pTransform->getPosition().y<=pTransform2->getPosition().y+4.0f && pTransform->getPosition().y>=pTransform2->getPosition().y-4.0f)
+		{
+			if(pTransform->getPosition().x<=pTransform2->getPosition().x+3.0f && pTransform->getPosition().x>=pTransform2->getPosition().x-3.0f)
+			{
+				if(pTransform->getPosition().z>pTransform2->getPosition().z+8.0f)
+				{
+				pTransform2->setPosition(pTransform2->getPosition().x,pTransform2->getPosition().y,pTransform2->getPosition().z+40.0f);
+				}
+			}
+		}
+	}
+
 	
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
