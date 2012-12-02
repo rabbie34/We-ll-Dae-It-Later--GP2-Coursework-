@@ -1,5 +1,6 @@
 #include "GameApplication.h"
 #include "GameObject.h"
+#include <ctime>
 
 
 #include "Input.h"
@@ -177,9 +178,11 @@ bool CGameApplication::initGame()
 
 	m_pGameObjectManager->setMainLight(pLightComponent);
 
+
 	//init, this must be called after we have created all game objects
 	m_pGameObjectManager->init();
-	
+
+	srand((unsigned)time(0));
 	m_Timer.start();
 	return true;
 }
@@ -318,6 +321,9 @@ void CGameApplication::update()
 	
 	//CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
+	//pTransform->translate(0,0,m_Timer.getTotalTime()/100);
+	//float random = RandomFloat (-10.0f,10.0f);
+	//pTransform->setPosition(random,0,0);
 	D3DXVECTOR3 coords = pTransform->getPosition();
 	//D3DXVECTOR3 forward = pTransform->getForward();
 	//CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
