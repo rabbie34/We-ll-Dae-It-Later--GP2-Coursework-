@@ -40,9 +40,9 @@ void CBodyComponent::update(float elapsedTime)
 		hkQuaternion rot=m_pRigidBody->getRotation();
 
 		//Set the position and rotation of the transform 
-		//transform->setPosition(pos.getComponent(0),pos.getComponent(1),pos.getComponent(2));
-		//transform->setRotation(rot.m_vec.getComponent(0),rot.m_vec.getComponent(1),
-			//rot.m_vec.getComponent(2),rot.m_vec.getComponent(3));
+		transform->setPosition(pos.getComponent(0),pos.getComponent(1),pos.getComponent(2));
+		transform->setRotation(rot.m_vec.getComponent(0),rot.m_vec.getComponent(1),
+			rot.m_vec.getComponent(2),rot.m_vec.getComponent(3));
 	}
 }
 

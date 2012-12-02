@@ -88,6 +88,8 @@ bool CGameApplication::initGame()
     //http://msdn.microsoft.com/en-us/library/bb173590%28v=VS.85%29.aspx - BMD
     m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST );	
 
+	hkpWorld* m_pWorld = CPhysics::getInstance().getPhysicsWorld();
+
 	//Creation of Skybox/Skysphere
 	CGameObject *pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Sky");
@@ -120,13 +122,15 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	CBoxCollider * pBox = new CBoxCollider();
+	
 
 
 	pTestGameObject->addComponent(pBox);
 	CBodyComponent * pBody = new CBodyComponent();
-	
 	pTestGameObject->addComponent(pBody);
-	pBody->init();
+	
+	
+	
 	
 	
 	//Sounds for the player ship
@@ -221,8 +225,8 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pBox);
 	pBody = new CBodyComponent();
 	
+	
 	pTestGameObject->addComponent(pBody);
-	pBody->init();
 	
 
 	//Space Station
@@ -282,8 +286,8 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->init();
 
 	//Play the game music and thruster sounds
-	pMusic->play(-1);
-	pAudio->play(-1);
+	//pMusic->play(-1);
+	//pAudio->play(-1);
 	
 	m_Timer.start();
 	return true;
@@ -382,7 +386,7 @@ void CGameApplication::update()
 
 	//Get the position of the ship to be used in various methods
 	CTransformComponent * pTransform= m_pGameObjectManager->findGameObject("player")->getTransform();
-	CBodyComponent * pTest = (CBodyComponent*)m_pGameObjectManager->findGameObject("player");
+	CBodyComponent * pTest = (CBodyComponent*)m_pGameObjectManager->findGameObject("player")->getComponent("BodyComponent");
 	//Rotate the ship back to its original position if no key is pressed
 	//pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
@@ -400,10 +404,12 @@ void CGameApplication::update()
 	
 	if(gameplaying=true)
 	{
-		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		//CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
+		CBodyComponent * pTransform2=(CBodyComponent*)m_pGameObjectManager->findGameObject("player")->getComponent("BodyComponent");
 		CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
-		pCamera->setLookAt(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z);
-		pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y+0.0f,pTransform->getPosition().z-15.0f);
+		hkVector4 playerPos = pTransform2->getRigidBody()->getPosition();
+		pCamera->setLookAt(playerPos.getComponent(0),playerPos.getComponent(1),playerPos.getComponent(2));
+		pCamera->getParent()->getTransform()->setPosition(playerPos.getComponent(0),playerPos.getComponent(1),-15+playerPos.getComponent(2));
 	}
 
 	//Moves the ship forward constantly
@@ -413,8 +419,9 @@ void CGameApplication::update()
 		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 		//pTransform->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 		hkVector4 forward;
-		forward.set(0.2f,0.2f,0.2f);
-		pTest->addForce(0,0,5,m_Timer.getElapsedTime());
+		forward.set(0.0f,0.0f,500.0f);
+
+		pTest->addForce(0,0,50,m_Timer.getElapsedTime());
 	}
 
 	//Shoot when the player presses the mouse and play a sound
@@ -448,7 +455,7 @@ void CGameApplication::update()
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
-	pTransform->rotate(-pTransform->getRotation().x*m_Timer.getElapsedTime()*5,-pTransform->getRotation().y*m_Timer.getElapsedTime()*5,-pTransform->getRotation().z*m_Timer.getElapsedTime()*5);
+	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
 	//pTransform->getParent()->getComponent("BodyComponent")->update(m_Timer.getElapsedTime());
 
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
@@ -474,7 +481,6 @@ void CGameApplication::update()
 			rotSpeed=12.0f;
 		}
 	}
-	
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 
 }
