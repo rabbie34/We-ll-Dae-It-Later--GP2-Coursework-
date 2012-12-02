@@ -144,7 +144,7 @@ bool CGameApplication::initGame()
 	//Planet Earth
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Earth");
-	pTestGameObject->getTransform()->setPosition(-100.0f,150.0f,400.0f);
+	pTestGameObject->getTransform()->setPosition(-150.0f,160.0f,400.0f);
 	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
 	pTestGameObject->getTransform()->setScale(0.8f,0.8f,0.8f);
 	pMaterial=new CMaterialComponent();
@@ -160,9 +160,9 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Satellite
-	pTestGameObject=new CGameObject();
+	/*pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Satellite");
-	pTestGameObject->getTransform()->setPosition(50.0f,75.0f,300.0f);
+	pTestGameObject->getTransform()->setPosition(-100.0f,160.0f,400.0f);
 	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
 	pTestGameObject->getTransform()->setRotation(1.6f,1.0f,1.5f);
 	pMaterial=new CMaterialComponent();
@@ -175,7 +175,7 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);
+	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
 	//Asteroid
 	/*pTestGameObject=new CGameObject();
@@ -472,6 +472,7 @@ void CGameApplication::update()
 		}
 	}
 
+	//Gets a random position on x and y within the ships range to move the space gate too.
 	float random = RandomFloat ((pTransform->getPosition().x-30.0f),(pTransform->getPosition().x+30.0f));
 	float random2 = RandomFloat ((pTransform->getPosition().y-30.0f),(pTransform->getPosition().y+30.0f));
 
@@ -487,7 +488,7 @@ void CGameApplication::update()
 				if(pTransform->getPosition().z>pTransform2->getPosition().z+6.0f && pTransform->getPosition().z<pTransform2->getPosition().z+7.0f )
 				{
 				//if the player passes through the gate then move it forward to a random position and increase the score depending on their speed
-				pTransform2->setPosition(random,random2,pTransform2->getPosition().z+80.0f);
+				pTransform2->setPosition(random,random2,pTransform2->getPosition().z+60.0f);
 				if(speed<=8.0f)
 				{
 					score=score+10;
@@ -503,7 +504,7 @@ void CGameApplication::update()
 		//If the ship missed the space gate then move the space gate anyway
 		if(pTransform->getPosition().z>pTransform2->getPosition().z+20.0f)
 		{
-			pTransform2->setPosition(pTransform2->getPosition().x,pTransform2->getPosition().y,pTransform2->getPosition().z+160.0f);
+			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+100.0f);
 		}
 	}
 
