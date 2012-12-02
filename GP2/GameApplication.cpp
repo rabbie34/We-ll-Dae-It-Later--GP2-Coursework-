@@ -475,7 +475,7 @@ void CGameApplication::update()
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
 		if(pTransform->getPosition().y<=pTransform2->getPosition().y+4.0f && pTransform->getPosition().y>=pTransform2->getPosition().y-4.0f)
 		{
-			if(pTransform->getPosition().x<=pTransform2->getPosition().x+3.0f && pTransform->getPosition().x>=pTransform2->getPosition().x-3.0f)
+			if(pTransform->getPosition().x<=pTransform2->getPosition().x+3.5f && pTransform->getPosition().x>=pTransform2->getPosition().x-3.5f)
 			{
 				if(pTransform->getPosition().z>pTransform2->getPosition().z+8.0f)
 				{
