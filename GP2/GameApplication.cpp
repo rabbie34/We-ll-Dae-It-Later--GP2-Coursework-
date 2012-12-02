@@ -382,6 +382,7 @@ void CGameApplication::update()
 
 	//Get the position of the ship to be used in various methods
 	CTransformComponent * pTransform= m_pGameObjectManager->findGameObject("player")->getTransform();
+	CBodyComponent * pTest = (CBodyComponent*)m_pGameObjectManager->findGameObject("player");
 	//Rotate the ship back to its original position if no key is pressed
 	//pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
@@ -396,6 +397,7 @@ void CGameApplication::update()
 	}*/
 
 	//make the camera follow the ship around the screen
+	
 	if(gameplaying=true)
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
@@ -409,7 +411,10 @@ void CGameApplication::update()
 	{
 		//D3DXVECTOR3 direction = pTransform->getForward();
 		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
-		pTransform->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		//pTransform->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		hkVector4 forward;
+		forward.set(0.2f,0.2f,0.2f);
+		pTest->addForce(0,0,5,m_Timer.getElapsedTime());
 	}
 
 	//Shoot when the player presses the mouse and play a sound
