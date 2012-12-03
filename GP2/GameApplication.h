@@ -67,6 +67,7 @@ private:
 	float audioTimer;
 	int score;
 
+	//Used for generation of a random number between two floats
 	float RandomFloat(float a, float b) 
 	{
     float random = ((float) rand()) / (float) RAND_MAX;

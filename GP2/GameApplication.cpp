@@ -88,11 +88,10 @@ bool CGameApplication::initGame()
     //http://msdn.microsoft.com/en-us/library/bb173590%28v=VS.85%29.aspx - BMD
     m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST );	
 
-	//Creation of Skybox/Skysphere
+	//Creation of Skybox
 	CGameObject *pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Sky");
-	CMeshComponent *pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"sphere.fbx","");
-	//CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,2.0f,2.0f,2.0f);
+	CMeshComponent *pMesh=modelloader.createCube(m_pD3D10Device,2.0f,2.0f,2.0f);
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	CMaterialComponent *pMaterial=new CMaterialComponent();
 	pMaterial=new CMaterialComponent();
@@ -103,7 +102,7 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-	//Creation of the players ship
+	//Set up for the player ship. Loads in an object, textures it and sets position/rotation.
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("player");
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,-20.0f);
@@ -114,17 +113,12 @@ bool CGameApplication::initGame()
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
 	pMaterial->loadDiffuseTexture("buffShip_Diff.jpg");
 	pMaterial->loadSpecularTexture("buffShip_Spec.jpg");
-	//pMaterial->loadParallaxTexture("buffShip_parallax.jpg");
+	//pMaterial->loadParallaxTexture("buffShip_parallax.jpg");  //Textures dont work properly.
 	//pMaterial->loadBumpTexture("buffShip_Bump.png");
 	pTestGameObject->addComponent(pMaterial);
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	CBoxCollider *pBox=new CBoxCollider();
-	pBox->setExtents(5.2f,1.8f,5.2f);
-	pBox->enable();
-	pBox->physicsShape();
-	pTestGameObject->addComponent(pBox);
 	//Sounds for the player ship
 	CAudioSourceComponent *pAudio=new CAudioSourceComponent();
 	pAudio->setFilename("Thrust2.wav"); //If its a wav file, you should not stream
@@ -135,16 +129,15 @@ bool CGameApplication::initGame()
 	pLaser->setStream(false);
 	pTestGameObject->addComponent(pLaser);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
-	
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
-	speed=8.0f;
-	rotSpeed=12.0f;
+	speed=10.0f;
+	rotSpeed=16.0f;
 
-	//Planet Earth
+	//Creation of various planets and objects to popluate the scene. Uses the same method as player creation.
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Earth");
-	pTestGameObject->getTransform()->setPosition(-150.0f,160.0f,400.0f);
+	pTestGameObject->getTransform()->setPosition(-150.0f,160.0f,500.0f);
 	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
 	pTestGameObject->getTransform()->setScale(0.8f,0.8f,0.8f);
 	pMaterial=new CMaterialComponent();
@@ -158,24 +151,86 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
-
-	//Satellite
-	/*pTestGameObject=new CGameObject();
-	pTestGameObject->setName("Satellite");
-	pTestGameObject->getTransform()->setPosition(-100.0f,160.0f,400.0f);
-	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
-	pTestGameObject->getTransform()->setRotation(1.6f,1.0f,1.5f);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("PlanetIce");
+	pTestGameObject->getTransform()->setPosition(150.0f,-90.0f,650.0f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(0.6f,0.6f,0.6f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
 	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
-	pMaterial->loadDiffuseTexture("mat_sate.bmp");
-	pMaterial->loadBumpTexture("mat_stateNORMAL.bmp");
+	pMaterial->loadDiffuseTexture("mat_plan2.bmp");
+	pMaterial->loadBumpTexture("mat_plan NORMAL2.bmp");
 	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx","");
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_ice.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("PlanetFire");
+	pTestGameObject->getTransform()->setPosition(300.0f,400.0f,900.0f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(1.5f,1.5f,1.5f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_plan3.bmp");
+	pMaterial->loadBumpTexture("mat_plan NORMAL3.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_fire.fbx","");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Moon");
+	pTestGameObject->getTransform()->setPosition(-120.0f,160.0f,500.0f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(0.15f,0.15f,0.15f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_plan4.bmp");
+	pMaterial->loadBumpTexture("mat_plan NORMAL4.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_moon.fbx","");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Jupiter");
+	pTestGameObject->getTransform()->setPosition(-150.0f,-130.0f,380.0f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(1.5f,1.5f,1.5f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_plan5.bmp");
+	pMaterial->loadBumpTexture("mat_plan NORMAL5.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_jupiter.fbx","");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Mars");
+	pTestGameObject->getTransform()->setPosition(250.0f,-230.0f,450.0f);
+	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(1.0f,1.0f,1.0f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_plan6.bmp");
+	pMaterial->loadBumpTexture("mat_plan NORMAL6.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_mars.fbx","");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Asteroid
 	/*pTestGameObject=new CGameObject();
@@ -195,7 +250,7 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);*/
 
-	//Space Gate
+	//Creation of the space gate that the player will fly through
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Gate");
 	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,5.0f);
@@ -211,18 +266,13 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
-	pBox=new CBoxCollider();
-	pBox->setExtents(10.0f,10.0f,2.0f);
-	pBox->enable();
-	pBox->physicsShape();
-	pTestGameObject->addComponent(pBox);
 
-	//Space Station
+	//Creation of the space station and satellites that surround it.
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Station");
-	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,30.0f);
+	pTestGameObject->getTransform()->setPosition(0.0f,-400.0f,600.0f);
 	pTestGameObject->getTransform()->setRotation(1.6f,0.0f,1.6f);
-	pTestGameObject->getTransform()->setScale(0.2f,0.2f,0.2f);
+	pTestGameObject->getTransform()->setScale(1.0f,1.0f,1.0f);
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Parallax.fx");
@@ -232,6 +282,38 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMaterial);
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"station.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Satellite");
+	pTestGameObject->getTransform()->setPosition(0.0f,-350.0f,650.0f);
+	pTestGameObject->getTransform()->setScale(0.1f,0.1f,0.1f);
+	pTestGameObject->getTransform()->setRotation(1.6f,1.0f,1.5f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_sate.bmp");
+	pMaterial->loadBumpTexture("mat_stateNORMAL.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"satellite.fbx","");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Satellite2");
+	pTestGameObject->getTransform()->setPosition(100.0f,-480.0f,500.0f);
+	pTestGameObject->getTransform()->setScale(0.1f,0.1f,0.1f);
+	pTestGameObject->getTransform()->setRotation(1.6f,1.0f,1.5f);
+	pTestGameObject->addComponent(pMaterial);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Satellite3");
+	pTestGameObject->getTransform()->setPosition(-120.0f,-400.0f,600.0f);
+	pTestGameObject->getTransform()->setScale(0.1f,0.1f,0.1f);
+	pTestGameObject->getTransform()->setRotation(1.6f,1.0f,1.5f);
+	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
@@ -278,7 +360,7 @@ bool CGameApplication::initGame()
 	//pAudio->play(-1);
 
 	score=0; //set the player score at the start to 0
-	srand((unsigned)time(0));
+	srand((unsigned)time(0)); //Seed used for random number generation
 	
 	m_Timer.start();
 	return true;
@@ -373,26 +455,56 @@ void CGameApplication::update()
 	CAudioSystem::getInstance().update();
 	CInput::getInstance().getJoypad(0)->update();
 
-	//Variable used to get around editing more than one object at a time and game states.
-	bool gameplaying=true;
+	bool gameplaying=true; //Variable used to get around editing more than one object at a time and game states.
 
 	//Get the position of the ship to be used in various methods
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("player")->getTransform();
+	//Move the ship forward constantly even if its rotation changes.
+	D3DXVECTOR3 direction = pTransform->getForward();
+	pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
 	//Rotate the ship back to its original position if no key is pressed
 	pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
 	//rotates Objects in the scene continuously.
 	if(gameplaying=true)
 	{
-		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Earth")->getTransform();
-		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.10f);
-		pTransform2->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		//Rotation on the space gate
+		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
+		pTransform2->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.25f);
 
-		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Gate")->getTransform();
-		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*1.25f);
+		//Rotation of the various planets in the scene. Also moves them away from the player so they can never reach them.
+		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Earth")->getTransform();
+		pTransform3->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.10f);
+		pTransform3->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform4=m_pGameObjectManager->findGameObject("PlanetIce")->getTransform();
+		pTransform4->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.15f);
+		pTransform4->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform5=m_pGameObjectManager->findGameObject("PlanetFire")->getTransform();
+		pTransform5->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.08f);
+		pTransform5->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform6=m_pGameObjectManager->findGameObject("Moon")->getTransform();
+		pTransform6->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.15f);
+		pTransform6->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform7=m_pGameObjectManager->findGameObject("Jupiter")->getTransform();
+		pTransform7->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.04f);
+		pTransform7->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform8=m_pGameObjectManager->findGameObject("Mars")->getTransform();
+		pTransform8->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.07f);
+		pTransform8->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+
+		//movement of the space station and satellites away from the player so they can never reach them.
+		CTransformComponent * pTransform9=m_pGameObjectManager->findGameObject("Station")->getTransform();
+		pTransform9->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform10=m_pGameObjectManager->findGameObject("Satellite")->getTransform();
+		pTransform10->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform11=m_pGameObjectManager->findGameObject("Satellite2")->getTransform();
+		pTransform11->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+		CTransformComponent * pTransform12=m_pGameObjectManager->findGameObject("Satellite3")->getTransform();
+		pTransform12->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 	}
 
-	//make the camera follow the ship around the screen
+	//make the camera follow the ship around the screen by setting its lookat to the ship co-ordinates 
+	//and its position close to those same co-ords.
 	if(gameplaying=true)
 	{
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
@@ -401,14 +513,7 @@ void CGameApplication::update()
 		pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y+0.0f,pTransform->getPosition().z-15.0f);
 	}
 
-	//Moves the ship forward constantly
-	if(gameplaying=true)
-	{
-		D3DXVECTOR3 direction = pTransform->getForward();
-		pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
-	}
-	
-	//Shoot when the player presses the mouse and play a sound
+	//When the player presses the mouse/trigger down check to see if they hit an asteroid and play a sound.
 	if (CInput::getInstance().getMouse()->getMouseDown(0)|| CInput::getInstance().getJoypad(0)->getRightTrigger()>0)
 	{
 		CAudioSourceComponent * pLaser=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
@@ -419,14 +524,14 @@ void CGameApplication::update()
 		}
 		
 	}
-	
 	//Ensures the sound is not played too often.
 	if (audioTimer >= 0)
 	{
 		audioTimer-=m_Timer.getElapsedTime();
 	}
 
-	//Fly the up/down/left/right depending on they key pressed or the direction of the joystick.
+	//Fly the ship up/down/left/right depending on they key pressed/the direction of the joystick. 
+	//Titls the ship in the direction of movement as well as changes its actual positioning.
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W') || CInput::getInstance().getJoypad(0)->getLeftThumbStickY()<-12000)
 	{
 		pTransform->translate(0.0f,m_Timer.getElapsedTime()*rotSpeed,0.0f);
@@ -448,7 +553,7 @@ void CGameApplication::update()
 		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
 	}
 
-	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.
+	//Increase the ship speed when space/trigger is held down, then set the speed back to normal when nothing is being pressed.
 	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_SPACE) || CInput::getInstance().getJoypad(0)->getLeftTrigger()>0.5)
 	{
 		if(speed<35.0f)
@@ -459,16 +564,16 @@ void CGameApplication::update()
 	}
 	else
 	{
-		if(speed>8.0f)
+		if(speed>10.0f)
 		{
 			speed=speed-m_Timer.getElapsedTime()*10.0f;
 			rotSpeed=rotSpeed-m_Timer.getElapsedTime()*10.0f;
 		}
 		//Ensures the speed can not go below its original value.
-		if(speed<8.0f)
+		if(speed<10.0f)
 		{
-			speed=8.0f;
-			rotSpeed=12.0f;
+			speed=10.0f;
+			rotSpeed=16.0f;
 		}
 	}
 
@@ -477,8 +582,8 @@ void CGameApplication::update()
 	float random2 = RandomFloat ((pTransform->getPosition().y-30.0f),(pTransform->getPosition().y+30.0f));
 
 	//Collision detection method
-	if(gameplaying=true){
-		
+	if(gameplaying=true)
+	{
 		//Get the co-ordinates of the space gate and check to see if the ship passes through it.
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Gate")->getTransform();
 		if(pTransform->getPosition().y<=pTransform2->getPosition().y+4.0f && pTransform->getPosition().y>=pTransform2->getPosition().y-4.0f)
@@ -489,28 +594,25 @@ void CGameApplication::update()
 				{
 				//if the player passes through the gate then move it forward to a random position and increase the score depending on their speed
 				pTransform2->setPosition(random,random2,pTransform2->getPosition().z+60.0f);
-				if(speed<=8.0f)
-				{
-					score=score+10;
-				}
-				else
-				{
-					score=score+20;
-				}
+					if(speed<=8.0f)
+					{
+						score=score+10;
+					}
+					else
+					{
+						score=score+20;
+					}
 				}
 			}
 		}
-		
 		//If the ship missed the space gate then move the space gate anyway
 		if(pTransform->getPosition().z>pTransform2->getPosition().z+20.0f)
 		{
-			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+100.0f);
+			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+120.0f);
 		}
 	}
 
-	
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
-
 }
 
 //Initialization for physics, input, graphics and window.
@@ -686,7 +788,7 @@ bool CGameApplication::initGraphics()
 bool CGameApplication::initWindow()
 {
 	m_pWindow=new CWin32Window();
-	if (!m_pWindow->init(TEXT("Games Programming"),800,800,false))
+	if (!m_pWindow->init(TEXT("Space, Cause its easier than land!"),600,600,false))
 		return false;
 	return true;
 }
