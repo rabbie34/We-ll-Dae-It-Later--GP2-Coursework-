@@ -86,7 +86,7 @@ bool CGameApplication::initGame()
 {
     // Set primitive topology, how are we going to interpet the vertices in the vertex buffer - BMD
     //http://msdn.microsoft.com/en-us/library/bb173590%28v=VS.85%29.aspx - BMD
-    m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST );	
+    m_pD3D10Device->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP );	
 
 	hkpWorld* m_pWorld = CPhysics::getInstance().getPhysicsWorld();
 
@@ -100,7 +100,7 @@ bool CGameApplication::initGame()
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	pMaterial->loadEnvironmentTexture("sb2.png");
+	pMaterial->loadEnvironmentTexture("Space.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -121,13 +121,13 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"buffship2.fbx","buffshipfix");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
-	CBoxCollider * pBox = new CBoxCollider();
+	//CBoxCollider * pBox = new CBoxCollider();
 	
 
 
-	pTestGameObject->addComponent(pBox);
-	CBodyComponent * pBody = new CBodyComponent();
-	pTestGameObject->addComponent(pBody);
+	//pTestGameObject->addComponent(pBox);
+	//CBodyComponent * pBody = new CBodyComponent();
+	//pTestGameObject->addComponent(pBody);
 	
 	
 	
@@ -219,14 +219,14 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
-	pBox = new CBoxCollider();
+	//pBox = new CBoxCollider();
 
 
-	pTestGameObject->addComponent(pBox);
-	pBody = new CBodyComponent();
+	//pTestGameObject->addComponent(pBox);
+	//pBody = new CBodyComponent();
 	
 	
-	pTestGameObject->addComponent(pBody);
+	//pTestGameObject->addComponent(pBody);
 	
 
 	//Space Station
@@ -386,7 +386,7 @@ void CGameApplication::update()
 
 	//Get the position of the ship to be used in various methods
 	CTransformComponent * pTransform= m_pGameObjectManager->findGameObject("player")->getTransform();
-	CBodyComponent * pTest = (CBodyComponent*)m_pGameObjectManager->findGameObject("player")->getComponent("BodyComponent");
+	//CBodyComponent * pTest = (CBodyComponent*)m_pGameObjectManager->findGameObject("player")->getComponent("BodyComponent");
 	//Rotate the ship back to its original position if no key is pressed
 	//pTransform->rotate((shipRot.x-pTransform->getRotation().x)*m_Timer.getElapsedTime()*5.0f,(shipRot.y-pTransform->getRotation().y)*m_Timer.getElapsedTime()*5.0f,(shipRot.z-pTransform->getRotation().z)*m_Timer.getElapsedTime()*5.0f);
 
@@ -407,30 +407,40 @@ void CGameApplication::update()
 		//CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Camera")->getTransform();
 		CBodyComponent * pTransform2=(CBodyComponent*)m_pGameObjectManager->findGameObject("player")->getComponent("BodyComponent");
 		CCameraComponent * pCamera=m_pGameObjectManager->getMainCamera();
-		hkVector4 playerPos = pTransform2->getRigidBody()->getPosition();
-		pCamera->setLookAt(playerPos.getComponent(0),playerPos.getComponent(1),playerPos.getComponent(2));
-		pCamera->getParent()->getTransform()->setPosition(playerPos.getComponent(0),playerPos.getComponent(1),-15+playerPos.getComponent(2));
+		//hkVector4 playerPos = pTransform2->getRigidBody()->getPosition();
+		pCamera->setLookAt(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z);
+		pCamera->getParent()->getTransform()->setPosition(pTransform->getForward().x*-15 + pTransform->getPosition().x,
+															pTransform->getForward().y*-15 + pTransform->getPosition().y,
+															pTransform->getForward().z*-15 + pTransform->getPosition().z);
 	}
 
 	//Moves the ship forward constantly
 	if(gameplaying=true)
 	{
-		//D3DXVECTOR3 direction = pTransform->getForward();
-		//pTransform->translate(direction.x* m_Timer.getElapsedTime() * speed, direction.y*m_Timer.getElapsedTime(), direction.z * m_Timer.getElapsedTime() * speed );
+		D3DXVECTOR3 direction = pTransform->getForward();
+		pTransform->translate(direction.x* m_Timer.getElapsedTime() * 5, direction.y*m_Timer.getElapsedTime()*5, direction.z * m_Timer.getElapsedTime() * 5 );
 		//pTransform->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 		hkVector4 forward;
 		forward.set(0.0f,0.0f,500.0f);
 
-		pTest->addForce(0,0,50,m_Timer.getElapsedTime());
+		//pTest->addForce(0,0,50,m_Timer.getElapsedTime());
+		//pTransform->translate(pTransform->getForward().x*m_Timer,
 	}
+
+	CTransformComponent * player = m_pGameObjectManager->findGameObject("player")->getTransform();
+	CTransformComponent * gate = m_pGameObjectManager->findGameObject("Gate")->getTransform();
+	float xPos = gate->getPosition().x+sin(m_Timer.getTotalTime())*5;
+	float yPos = gate->getPosition().y;
+	float zPos = gate->getPosition().z+cos(m_Timer.getTotalTime())*5;
+	//player->setPosition(xPos,yPos,zPos);
 
 	//Shoot when the player presses the mouse and play a sound
 	if (CInput::getInstance().getMouse()->getMouseDown(0))
 	{
 		//Audio - grab the audio component
-		CAudioSourceComponent * pLaser=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
+		//CAudioSourceComponent * pLaser=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("player")->getComponent("AudioSourceComponent");
 		//Audio - call play
-		pLaser->play();
+		//pLaser->play();
 	}
 	
 	//Fly the up/down/left/right depending on they key pressed.
@@ -447,15 +457,15 @@ void CGameApplication::update()
 	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*rotSpeed,0.0f,0.0f);
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
+		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-2.5f,0.0f);
 	}
 	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
 	{
 		pTransform->translate(m_Timer.getElapsedTime()*-rotSpeed,0.0f,0.0f);
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);	
+		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*2.5f,0.0f);	
 	}
 
-	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
+	//pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
 	//pTransform->getParent()->getComponent("BodyComponent")->update(m_Timer.getElapsedTime());
 
 	//Increase the ship speed when space is held down, set back to normal when it isnt being pressed.

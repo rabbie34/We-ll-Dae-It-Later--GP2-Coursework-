@@ -84,6 +84,11 @@ public:
 		return m_vecPosition;
 	};
 
+	D3DXVECTOR3& getForward()
+	{
+		return D3DXVECTOR3(sin(m_vecRotation.y) * cos(m_vecRotation.x) , -sin(m_vecRotation.x), cos(m_vecRotation.y) * cos(m_vecRotation.x)  );
+	};
+
 	//get world
 	D3DXMATRIX& getWorld()
 	{
