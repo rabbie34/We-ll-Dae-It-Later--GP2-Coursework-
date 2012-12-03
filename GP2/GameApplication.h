@@ -18,15 +18,11 @@
 #include "AudioSystem.h"
 #include "AudioListenerComponent.h"
 
-//Physics
-#include "Physics.h"
-#include "BoxCollider.h"
-
 #include <vector>
 
 using namespace std;
 
-class CGameApplication:public hkpContactListener 
+class CGameApplication
 {
 public:
 	CGameApplication(void);
@@ -37,13 +33,10 @@ private:
 	bool initInput();
 	bool initGame();
 	bool initGraphics();
-	bool initPhysics();
 	bool initAudio();
 	bool initWindow();
 	void render();
 	void update();
-
-	void contactPointCallback (const hkpContactPointEvent &event); 
 
 private:
 	//Graphics

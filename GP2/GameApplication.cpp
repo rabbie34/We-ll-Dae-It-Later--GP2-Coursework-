@@ -31,8 +31,6 @@ CGameApplication::~CGameApplication(void)
 		m_pGameObjectManager=NULL;
 	}
 
-	CPhysics::getInstance().destroy();
-
 	if (m_pRenderTargetView)
 		m_pRenderTargetView->Release();
 	if (m_pDepthStencelView)
@@ -58,27 +56,11 @@ bool CGameApplication::init()
 		return false;
 	if (!initInput())
 		return false;
-	if (!initPhysics())
-		return false;
 	if (!initAudio())
 		return false;
 	if (!initGame())
 		return false;
 	return true;
-}
-
-//Collision Detection
-void CGameApplication::contactPointCallback (const hkpContactPointEvent &event)
-{
-	/*
-	//Called when a collision occurs
-	hkpRigidBody *pBody1=event.getBody(0);
-	hkpRigidBody *pBody2=event.getBody(1);
-
-	CGameObject *pGameObject1=(CGameObject*)pBody1->getUserData();
-	CGameObject *pGameObject2=(CGameObject*)pBody2->getUserData();
-
-	//Do something with the game objects*/
 }
 
 //Initialization of Objects
@@ -451,7 +433,6 @@ void CGameApplication::update()
 {
 	//Used to update the game, physics simulation, audio and joypad input.
 	m_Timer.update();
-	CPhysics::getInstance().update(m_Timer.getElapsedTime());
 	CAudioSystem::getInstance().update();
 	CInput::getInstance().getJoypad(0)->update();
 
@@ -642,14 +623,7 @@ void CGameApplication::update()
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 }
 
-//Initialization for physics, input, graphics and window.
-bool CGameApplication::initPhysics()
-{
-	CPhysics::getInstance().init();
-	//Add the Game Application
-	CPhysics::getInstance().getPhysicsWorld()->addContactListener(this);
-	return true;
-}
+//Initialization for input, graphics and window.
 
 bool CGameApplication::initInput()
 {
