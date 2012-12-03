@@ -537,11 +537,11 @@ void CGameApplication::update()
 			pLaser->play();
 			audioTimer = 0.4f;
 		}
-
-		/*CInput::getInstance().getMouse()->getAbsoluteMouseX();
-		CInput::getInstance().getMouse()->getAbsoluteMouseY();*/
-
-		
+		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Asteroid")->getTransform();
+		if(CInput::getInstance().getMouse()->getRelativeMouseX()<=pTransform2->getPosition().x+2.5f && CInput::getInstance().getMouse()->getRelativeMouseX()>=pTransform2->getPosition().x-6.5f)
+		{
+			pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
+		}
 	}
 	//Ensures the sound is not played too often.
 	if (audioTimer >= 0)
@@ -624,7 +624,7 @@ void CGameApplication::update()
 			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+150.0f);
 		}
 
-		//Get the co-ordinates of the asteroid and check to see if the ship passes through it.
+		//Get the co-ordinates of the asteroid and check to see if the ship hits it.
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Asteroid")->getTransform();
 		if(pTransform->getPosition().y<=pTransform3->getPosition().y+3.0f && pTransform->getPosition().y>=pTransform3->getPosition().y-3.0f)
 		{
