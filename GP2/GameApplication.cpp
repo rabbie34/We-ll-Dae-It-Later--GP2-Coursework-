@@ -601,7 +601,7 @@ void CGameApplication::update()
 	float random2 = RandomFloat ((pTransform->getPosition().y-30.0f),(pTransform->getPosition().y+30.0f));
 	float random3 = RandomFloat ((pTransform->getPosition().z+35.0f),(pTransform->getPosition().z+100.0f));
 
-	//Collision detection method
+	//Method used for collision detection with the space gates and asteroids.
 	if(gameplaying=true)
 	{
 		//Get the co-ordinates of the space gate and check to see if the ship passes through it.
