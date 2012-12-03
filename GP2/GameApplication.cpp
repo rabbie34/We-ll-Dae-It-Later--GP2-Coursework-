@@ -97,7 +97,7 @@ bool CGameApplication::initGame()
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
 	pMaterial->setEffectFilename("Environment.fx");
-	pMaterial->loadEnvironmentTexture("sb2.png");
+	pMaterial->loadEnvironmentTexture("Space.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -232,24 +232,6 @@ bool CGameApplication::initGame()
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
-	//Asteroid
-	/*pTestGameObject=new CGameObject();
-	pTestGameObject->setName("Asteroid");
-	pTestGameObject->getTransform()->setPosition(5.0f,0.0f,0.0f);
-	pTestGameObject->getTransform()->setRotation(1.0f,0.0f,0.0f);
-	pTestGameObject->getTransform()->setScale(0.07f,0.07f,0.07f);
-	pMaterial=new CMaterialComponent();
-	pMaterial->SetRenderingDevice(m_pD3D10Device);
-	pMaterial->setEffectFilename("Parallax.fx");
-	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
-	pMaterial->loadDiffuseTexture("mat_ateroid_1.bmp");
-	pMaterial->loadBumpTexture("mat_asteNORMAL.bmp");
-	pTestGameObject->addComponent(pMaterial);
-	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx","");
-	pMesh->SetRenderingDevice(m_pD3D10Device);
-	pTestGameObject->addComponent(pMesh);
-	m_pGameObjectManager->addGameObject(pTestGameObject);*/
-
 	//Creation of the space gate that the player will fly through
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("Gate");
@@ -263,6 +245,24 @@ bool CGameApplication::initGame()
 	pMaterial->loadBumpTexture("mat_gate NORMAL.bmp");
 	pTestGameObject->addComponent(pMaterial);
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"gate.fbx","");
+	pMesh->SetRenderingDevice(m_pD3D10Device);
+	pTestGameObject->addComponent(pMesh);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
+	
+	//Asteroid that the player can collide with
+	pTestGameObject=new CGameObject();
+	pTestGameObject->setName("Asteroid");
+	pTestGameObject->getTransform()->setPosition(0.0f,0.0f,300.0f);
+	pTestGameObject->getTransform()->setRotation(0.0f,0.0f,0.0f);
+	pTestGameObject->getTransform()->setScale(0.07f,0.07f,0.07f);
+	pMaterial=new CMaterialComponent();
+	pMaterial->SetRenderingDevice(m_pD3D10Device);
+	pMaterial->setEffectFilename("Parallax.fx");
+	pMaterial->setAmbientMaterialColour(D3DXCOLOR(0.2f,0.2f,0.2f,1.0f));
+	pMaterial->loadDiffuseTexture("mat_ateroid_1.bmp");
+	pMaterial->loadBumpTexture("mat_asteNORMAL.bmp");
+	pTestGameObject->addComponent(pMaterial);
+	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
@@ -492,6 +492,12 @@ void CGameApplication::update()
 		pTransform8->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*0.07f);
 		pTransform8->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 
+		//Makes the moon orbit the earth
+		float xPos = pTransform3->getPosition().x+sin(m_Timer.getTotalTime()/4)*55;
+		float yPos = pTransform3->getPosition().y;
+		float zPos = pTransform3->getPosition().z+cos(m_Timer.getTotalTime()/4)*55;
+		pTransform6->setPosition(xPos,yPos,zPos);
+
 		//movement of the space station and satellites away from the player so they can never reach them.
 		CTransformComponent * pTransform9=m_pGameObjectManager->findGameObject("Station")->getTransform();
 		pTransform9->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
@@ -501,6 +507,15 @@ void CGameApplication::update()
 		pTransform11->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
 		CTransformComponent * pTransform12=m_pGameObjectManager->findGameObject("Satellite3")->getTransform();
 		pTransform12->translate(0.0f,0.0f,m_Timer.getElapsedTime()*speed);
+
+		//move the asteroid towards the player and have it spinning. If it goes past the player, respawn it back infront.
+		CTransformComponent * pTransform13=m_pGameObjectManager->findGameObject("Asteroid")->getTransform();
+		pTransform13->translate(0.0f,0.0f,m_Timer.getElapsedTime()*-100.0f);
+		pTransform13->rotate(m_Timer.getElapsedTime()*-5.0f,m_Timer.getElapsedTime(),0.0f);
+		if(pTransform13->getPosition().z<pTransform->getPosition().z-10.0f)
+		{
+			pTransform13->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
+		}
 	}
 
 	//make the camera follow the ship around the screen by setting its lookat to the ship co-ordinates 
@@ -522,6 +537,10 @@ void CGameApplication::update()
 			pLaser->play();
 			audioTimer = 0.4f;
 		}
+
+		/*CInput::getInstance().getMouse()->getAbsoluteMouseX();
+		CInput::getInstance().getMouse()->getAbsoluteMouseY();*/
+
 		
 	}
 	//Ensures the sound is not played too often.
@@ -580,6 +599,7 @@ void CGameApplication::update()
 	//Gets a random position on x and y within the ships range to move the space gate too.
 	float random = RandomFloat ((pTransform->getPosition().x-30.0f),(pTransform->getPosition().x+30.0f));
 	float random2 = RandomFloat ((pTransform->getPosition().y-30.0f),(pTransform->getPosition().y+30.0f));
+	float random3 = RandomFloat ((pTransform->getPosition().z+35.0f),(pTransform->getPosition().z+100.0f));
 
 	//Collision detection method
 	if(gameplaying=true)
@@ -593,22 +613,29 @@ void CGameApplication::update()
 				if(pTransform->getPosition().z>pTransform2->getPosition().z+6.0f && pTransform->getPosition().z<pTransform2->getPosition().z+7.0f )
 				{
 				//if the player passes through the gate then move it forward to a random position and increase the score depending on their speed
-				pTransform2->setPosition(random,random2,pTransform2->getPosition().z+60.0f);
-					if(speed<=8.0f)
-					{
-						score=score+10;
-					}
-					else
-					{
-						score=score+20;
-					}
+				pTransform2->setPosition(random,random2,random3);
+				score=score+speed;
 				}
 			}
 		}
 		//If the ship missed the space gate then move the space gate anyway
 		if(pTransform->getPosition().z>pTransform2->getPosition().z+20.0f)
 		{
-			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+120.0f);
+			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+150.0f);
+		}
+
+		//Get the co-ordinates of the asteroid and check to see if the ship passes through it.
+		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Asteroid")->getTransform();
+		if(pTransform->getPosition().y<=pTransform3->getPosition().y+3.0f && pTransform->getPosition().y>=pTransform3->getPosition().y-3.0f)
+		{
+			if(pTransform->getPosition().x<=pTransform3->getPosition().x+2.5f && pTransform->getPosition().x>=pTransform3->getPosition().x-6.5f)
+			{
+				if(pTransform->getPosition().z>pTransform3->getPosition().z && pTransform->getPosition().z<pTransform3->getPosition().z+1.0f )
+				{
+					pTransform3->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
+					pTransform->rotate(-1.0f,0.0f,0.0f);
+				}
+			}
 		}
 	}
 
