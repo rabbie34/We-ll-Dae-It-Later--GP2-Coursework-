@@ -6,6 +6,7 @@
 #include "Joypad.h"
 #include <ctime>
 
+//Constructers/Destructor.
 CGameApplication::CGameApplication(void)
 {
 	m_pWindow=NULL;
@@ -66,6 +67,7 @@ bool CGameApplication::init()
 	return true;
 }
 
+//Initialization for the gui and the main game.
 bool CGameApplication::initGUI()
 {
 	D3D10_VIEWPORT vp;
@@ -126,8 +128,8 @@ void CGameApplication::initMainGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
-	speed=12.0f;
-	rotSpeed=18.0f;
+	speed=16.0f;
+	rotSpeed=22.0f;
 
 	//Creation of various planets and objects to popluate the scene. Uses the same method as player creation.
 	pTestGameObject=new CGameObject();
@@ -362,7 +364,6 @@ void CGameApplication::initMainGame()
 
 	//Play the game music and thruster sounds
 	pMusic->play(-1);
-	//pAudio->play(-1);
 
 	score=0; //set the player score at the start to 0
 	srand((unsigned)time(0)); //Seed used for random number generation
@@ -386,13 +387,7 @@ void CGameApplication::initMainMenu()
 	pMaterial->loadEnvironmentTexture("Space.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
-	//Sound for flying through ring
-	CAudioSourceComponent *pSmash=new CAudioSourceComponent();
-	pSmash->setFilename("Smashing.wav"); //If its a wav file, you should not stream
-	pSmash->setStream(false); //stream set to false
-	pTestGameObject->addComponent(pSmash); //Add it to the Game Object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
-
 
 	//Create Mesh
 	CGameObject *pCameraGameObject=new CGameObject();
@@ -438,6 +433,7 @@ bool CGameApplication::initGame()
 	return true;
 }
 
+//Run and renderer methods
 void CGameApplication::run()
 {
 	while(m_pWindow->running())
@@ -521,9 +517,11 @@ void CGameApplication::render()
     m_pSwapChain->Present( 0, 0 );
 }
 
+//Update method for the gameplay, most of the code is in here.
 void CGameApplication::updateMainGame()
 {
 	m_pGameGUI->Show();
+
 	//Used to update the game, physics simulation, audio and joypad input.
 	CAudioSystem::getInstance().update();
 	CInput::getInstance().getJoypad(0)->update();
@@ -658,16 +656,16 @@ void CGameApplication::updateMainGame()
 	}
 	else
 	{
-		if(speed>12.0f)
+		if(speed>16.0f)
 		{
 			speed=speed-m_Timer.getElapsedTime()*10.0f;
 			rotSpeed=rotSpeed-m_Timer.getElapsedTime()*10.0f;
 		}
 		//Ensures the speed can not go below its original value.
-		if(speed<12.0f)
+		if(speed<16.0f)
 		{
-			speed=12.0f;
-			rotSpeed=18.0f;
+			speed=16.0f;
+			rotSpeed=22.0f;
 		}
 	}
 
@@ -723,18 +721,21 @@ void CGameApplication::updateMainGame()
 		}
 	}
 
-		if (CInput::getInstance().getKeyboard()->isKeyDown((int)'P')||CInput::getInstance().getJoypad(0)->isButtonPressed(0x00000010))
+	//Used to pause the game.
+	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'P')||CInput::getInstance().getJoypad(0)->isButtonPressed(0x00000010))
+	{
+		if (m_GameState==GAME)
 		{
-			if (m_GameState==GAME){
-				m_pGameGUI->Hide();
-				m_GameState=PAUSE;
-				m_pPauseGUI->Show();
-			}
+			m_pGameGUI->Hide();
+			m_GameState=PAUSE;
+			m_pPauseGUI->Show();
 		}
+	}
 
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 }
 
+//Methods for starting and pausing the gameplay.
 void CGameApplication::updateMainMenu()
 {
 	CInput::getInstance().getJoypad(0)->update();
@@ -749,7 +750,7 @@ void CGameApplication::updateMainMenu()
 void CGameApplication::updatePauseGUI()
 {
 	CInput::getInstance().getJoypad(0)->update();
-		if(CInput::getInstance().getKeyboard()->isKeyDown((int)'O')||CInput::getInstance().getJoypad(0)->isButtonPressed(0x2000))
+		if(CInput::getInstance().getKeyboard()->isKeyDown(VK_ESCAPE)||CInput::getInstance().getJoypad(0)->isButtonPressed(0x2000))
 		{
 			if(m_GameState==PAUSE)
 			{
@@ -786,13 +787,7 @@ void CGameApplication::update()
 	m_pGameObjectManager->update(m_Timer.getElapsedTime());
 }
 
-bool CGameApplication::initInput()
-{
-	CInput::getInstance().init();
-	return true;
-}
-
-//initGraphics - initialise the graphics subsystem - BMD
+//Initialisation of graphics, audio, input and the game window.
 bool CGameApplication::initGraphics()
 {
 	//Retrieve the size of the window, this is need to match the
@@ -947,10 +942,16 @@ bool CGameApplication::initAudio()
 	return true;
 }
 
+bool CGameApplication::initInput()
+{
+	CInput::getInstance().init();
+	return true;
+}
+
 bool CGameApplication::initWindow()
 {
 	m_pWindow=new CWin32Window();
-	if (!m_pWindow->init(TEXT("Games Programming"),800,640,false))
+	if (!m_pWindow->init(TEXT("Space! Cause its easier than land."),600,600,false))
 		return false;
 	return true;
 }

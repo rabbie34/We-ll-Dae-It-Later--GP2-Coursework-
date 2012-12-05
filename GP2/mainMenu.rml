@@ -5,27 +5,24 @@
   </head>
   <body class="window">
     <div id="title_bar">
-      <span id="title">SPACE: BECAUSE ITS EASIER THAN LAND ...</span>
+      <span id="title">Space! Cause its easier than land.</span>
     </div>
       <div id="content">
 
 
         <p></p>
         <p></p>
-        
-        <p>Press Enter on the Keyboard or A on the controller to Launch your ship!</p>
-
-
-        <p>When the game begins use WASD or left analogue stick to move the ship.</p>
-
-        <p>To boost press Spacebar of the left trigger</p>
-
-        <p>Use mouse left click or the Right Trigger to fire lasers</p>
-
-        <p>
-          AIM OF THE GAME: Fly through Space Rings to increase your score,
-          while avoiding asteroids. Hitting them will lower your score!!
-        </p>
+        <p></p>
+        <p></p>
+        <p>Welcome Pilot Thornberry</p>
+        <p></p>
+        <p>Use WASD/Left Analouge to fly the ship,
+        Boost with Space/Left Trigger,
+        Fire Weapons with Mouse Click/Right Trigger,
+        Fly Through Rings to Increase Score,
+        Avoid the Asteroids!</p>
+        <p></p>
+        <p>Press Enter/A to Begin</p>
     </div>
   </body>
 </template>
