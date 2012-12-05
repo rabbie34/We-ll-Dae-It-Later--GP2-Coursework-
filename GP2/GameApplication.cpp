@@ -15,6 +15,7 @@ CGameApplication::CGameApplication(void)
 	m_pDepthStencilTexture=NULL;
 	m_pGameObjectManager=new CGameObjectManager();
 	m_GameState=MAINMENU;
+	m_fCurrentTime=0.0f;
 }
 
 CGameApplication::~CGameApplication(void)
@@ -352,11 +353,16 @@ void CGameApplication::updateMainGame()
 		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 		pTransform->rotate(0.0f,m_Timer.getElapsedTime()*-1,0.0f);
 	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'P'))
+	if (((int)m_fCurrentTime%1==0))
 	{
-		m_pGameGUI->Hide();
-		m_GameState=PAUSE;
-		m_pPauseGUI->Show();
+		if (CInput::getInstance().getKeyboard()->isKeyDown((int)'P'))
+		{
+			if (m_GameState==GAME){
+				m_pGameGUI->Hide();
+				m_GameState=PAUSE;
+				m_pPauseGUI->Show();
+			}
+		}
 	}
 }
 
@@ -370,10 +376,27 @@ void CGameApplication::updateMainMenu()
 	}
 }
 
+void CGameApplication::updatePauseGUI()
+{
+	if (((int)m_fCurrentTime%1==0))
+	{
+		if(CInput::getInstance().getKeyboard()->isKeyDown((int)'O'))
+		{
+			if(m_GameState==PAUSE)
+			{
+				m_pPauseGUI->Hide();
+				m_GameState=GAME;		
+				m_pGameGUI->Show();
+			}
+		}
+	}
+}
+
 
 void CGameApplication::update()
 {
 	m_Timer.update();
+	m_fCurrentTime+=m_Timer.getElapsedTime();
 	switch (m_GameState)
 	{
 		case MAINMENU:
@@ -384,6 +407,11 @@ void CGameApplication::update()
 		case GAME:
 			{
 				updateMainGame();
+				break;
+			}
+		case PAUSE:
+			{
+				updatePauseGUI();
 				break;
 			}
 	}

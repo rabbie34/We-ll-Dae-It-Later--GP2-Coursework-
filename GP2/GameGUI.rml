@@ -4,9 +4,6 @@
     <link type="text/rcss" href="invader.rcss"/>
   </head>
   <body class="window">
-    <div id="title_bar">
-      <span id="title">MAIN GAMEYGAME.</span>
-    </div>
       <div id="content">
         SCORE
       </div>

@@ -47,8 +47,11 @@ private:
 	void initMainGame();
 	void initMainMenu();
 
+
 	void updateMainGame();
 	void updateMainMenu();
+	void updatePauseGUI();
+
 private:
 	//Graphics
 	ID3D10Device * m_pD3D10Device;
@@ -72,4 +75,5 @@ private:
 
 	GameState m_GameState;
 	//Need one for every screen
+	float m_fCurrentTime;
 };
