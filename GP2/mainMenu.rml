@@ -7,15 +7,25 @@
     <div id="title_bar">
       <span id="title">SPACE: BECAUSE ITS EASIER THAN LAND ...</span>
     </div>
-    <div id="window">
       <div id="content">
-        Press G to start the GameyGame!
-      </div>
-      <div id="button">
-        <div id="content">
-          Start
-          </div>
-        </div>
+
+
+        <p></p>
+        <p></p>
+        
+        <p>Press Enter on the Keyboard or A on the controller to Launch your ship!</p>
+
+
+        <p>When the game begins use WASD or left analogue stick to move the ship.</p>
+
+        <p>To boost press Spacebar of the left trigger</p>
+
+        <p>Use mouse left click or the Right Trigger to fire lasers</p>
+
+        <p>
+          AIM OF THE GAME: Fly through Space Rings to increase your score,
+          while avoiding asteroids. Hitting them will lower your score!!
+        </p>
     </div>
   </body>
 </template>

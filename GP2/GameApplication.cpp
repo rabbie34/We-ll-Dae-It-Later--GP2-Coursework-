@@ -749,7 +749,7 @@ void CGameApplication::updateMainMenu()
 void CGameApplication::updatePauseGUI()
 {
 	CInput::getInstance().getJoypad(0)->update();
-		if(CInput::getInstance().getKeyboard()->isKeyDown((int)'O')||CInput::getInstance().getJoypad(0)->isButtonPressed(0x00000020))
+		if(CInput::getInstance().getKeyboard()->isKeyDown((int)'O')||CInput::getInstance().getJoypad(0)->isButtonPressed(0x2000))
 		{
 			if(m_GameState==PAUSE)
 			{

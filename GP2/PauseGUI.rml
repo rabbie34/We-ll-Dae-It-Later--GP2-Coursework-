@@ -7,15 +7,17 @@
     <div id="title_bar">
       <span id="title">GAME PAUSED ...</span>
     </div>
-    <div id="window">
       <div id="content">
-        Press P to continue the game!
+
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        
+        <p>O to continue the game!</p>
+        <p>Or Press B on the controller</p>
+        
       </div>
-      <div id="button">
-        <div id="content">
-          Start
-          </div>
-        </div>
-    </div>
   </body>
 </template>
