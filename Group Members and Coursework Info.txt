@@ -1,0 +1,14 @@
+Members:
+
+Callum Sneddon (Gameplay Programmer) -	S1021128
+Steven McKinnon (Audio Programmer)
+Robert McDougall (Graphics Programmer)
+Stewart Wilson (Input Programmer)
+Callum Craig (GUI/Tools Programmer)
+
+Gameplay controls are displayed in the menu. Can be done with mouse/keyboard or xbox controller.
+Ability to shoot wasn't fully implemented therefore wont work properly. Only plays the sound.
+
+May need to copy over files in order for the GUI to work properly.
+
+Go into the coursework foler>GP2>Lib and copy/replace the 3 files into the libRocket>Lib folder on your PC.
