@@ -6,6 +6,7 @@
 #include "Joypad.h"
 #include <ctime>
 
+
 //Constructor/Destructor
 CGameApplication::CGameApplication(void)
 {
@@ -604,7 +605,7 @@ void CGameApplication::update()
 		{
 			pTransform2->setPosition(random,random2,pTransform2->getPosition().z+150.0f);
 		}
-
+		
 		//Get the co-ordinates of the asteroid and check to see if the ship hits it.
 		CTransformComponent * pTransform3=m_pGameObjectManager->findGameObject("Asteroid")->getTransform();
 		if(pTransform->getPosition().y<=pTransform3->getPosition().y+3.0f && pTransform->getPosition().y>=pTransform3->getPosition().y-3.0f)
@@ -613,8 +614,13 @@ void CGameApplication::update()
 			{
 				if(pTransform->getPosition().z>pTransform3->getPosition().z && pTransform->getPosition().z<pTransform3->getPosition().z+1.0f )
 				{
+					float rotX = RandomFloat (-1,1);
+					float rotY = RandomFloat (-1,1);
+					float rotZ = RandomFloat (-1,1);
+
 					pTransform3->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
-					pTransform->rotate(-1.0f,0.0f,0.0f);
+					pTransform->rotate(rotX,rotY,rotZ);
+					pTransform->translate(rotX*5,rotY*5,rotZ*5);
 				}
 			}
 		}
