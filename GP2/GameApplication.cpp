@@ -717,6 +717,7 @@ void CGameApplication::updateMainGame()
 					pTransform3->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
 					pTransform->rotate(rotX,rotY,rotZ);
 					pTransform->translate(rotX*5,rotY*5,rotZ*5);
+					score=0;
 				}
 			}
 		}
@@ -759,7 +760,6 @@ void CGameApplication::updatePauseGUI()
 		}
 }
 
-
 void CGameApplication::update()
 {
 	m_Timer.update();
@@ -791,7 +791,6 @@ bool CGameApplication::initInput()
 	CInput::getInstance().init();
 	return true;
 }
-
 
 //initGraphics - initialise the graphics subsystem - BMD
 bool CGameApplication::initGraphics()
