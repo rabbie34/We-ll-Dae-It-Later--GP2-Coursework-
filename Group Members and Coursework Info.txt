@@ -6,9 +6,14 @@ Robert McDougall (Graphics Programmer)		S1020107
 Stewart Wilson (Input Programmer)		S1017595
 Callum Craig (GUI/Tools Programmer)		S1017279
 
-Gameplay controls are displayed in the menu. Can be done with mouse/keyboard or xbox controller.
-Ability to shoot wasn't fully implemented therefore wont work properly. Only plays the sound.
+
+NOTE BEFORE PLAYING!
 
 May need to copy over files in order for the GUI to work properly.
+Go into the coursework folder>GP2>Lib and copy the 3 files from there into the libRocket>Lib folder on your PC.
 
-Go into the coursework folder>GP2>Lib and copy/replace the 3 files into the libRocket>Lib folder on your PC.
+Best to run the game without debugging for smoother gameplay. On visual studio, go to the debug drop down menu
+and click start without debugging.
+
+Gameplay controls are displayed in the menu. Can be done with mouse/keyboard or xbox controller.
+Ability to shoot wasn't fully implemented therefore wont work properly. Only plays the sound.
