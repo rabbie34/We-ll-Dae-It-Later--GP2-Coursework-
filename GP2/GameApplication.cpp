@@ -83,6 +83,11 @@ bool CGameApplication::initGame()
 	pMaterial->loadEnvironmentTexture("Space.dds");
 	pTestGameObject->addComponent(pMaterial);
 	pTestGameObject->addComponent(pMesh);
+	//Sound for flying through ring
+	CAudioSourceComponent *pSmash=new CAudioSourceComponent();
+	pSmash->setFilename("Smashing.wav"); //If its a wav file, you should not stream
+	pSmash->setStream(false); //stream set to false
+	pTestGameObject->addComponent(pSmash); //Add it to the Game Object
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Set up for the player ship. Loads in an object, textures it and sets position/rotation.
@@ -103,14 +108,11 @@ bool CGameApplication::initGame()
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
 	//Sounds for the player ship
-	CAudioSourceComponent *pAudio=new CAudioSourceComponent();
-	pAudio->setFilename("Thrust2.wav"); //If its a wav file, you should not stream
-	pAudio->setStream(false); //stream set to false
-	pTestGameObject->addComponent(pAudio); //Add it to the Game Object
 	CAudioSourceComponent *pLaser=new CAudioSourceComponent();
 	pLaser->setFilename("laser.wav");
 	pLaser->setStream(false);
 	pTestGameObject->addComponent(pLaser);
+	m_pGameObjectManager->addGameObject(pTestGameObject);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
@@ -133,6 +135,11 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"planet_earth.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
+	//Sound for being hit by asteroid
+	CAudioSourceComponent *pBlarg=new CAudioSourceComponent();
+	pBlarg->setFilename("Blarg.wav");
+	pBlarg->setStream(false);
+	pTestGameObject->addComponent(pBlarg);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 	pTestGameObject=new CGameObject();
 	pTestGameObject->setName("PlanetIce");
@@ -248,6 +255,11 @@ bool CGameApplication::initGame()
 	pMesh=modelloader.loadModelFromFile(m_pD3D10Device,"asteroid.fbx","");
 	pMesh->SetRenderingDevice(m_pD3D10Device);
 	pTestGameObject->addComponent(pMesh);
+	//Sound for aseroid exlode
+	CAudioSourceComponent *pExplode=new CAudioSourceComponent();
+	pExplode->setFilename("Asteroid.wav");
+	pExplode->setStream(false);
+	pTestGameObject->addComponent(pExplode);
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 
 	//Creation of the space station and satellites that surround it.
@@ -321,7 +333,7 @@ bool CGameApplication::initGame()
 	CAudioListenerComponent *pListener=new CAudioListenerComponent();
 	pCameraGameObject->addComponent(pListener);
 	CAudioSourceComponent *pMusic=new CAudioSourceComponent();
-	pMusic->setFilename("Jurassic Park.mp3");
+	pMusic->setFilename("Star Wars.mp3");
 	pMusic->setStream(true);
 	pCameraGameObject->addComponent(pMusic);
 	m_pGameObjectManager->addGameObject(pCameraGameObject);
@@ -339,7 +351,7 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->init();
 
 	//Play the game music and thruster sounds
-	//pMusic->play(-1);
+	pMusic->play(-1);
 	//pAudio->play(-1);
 
 	score=0; //set the player score at the start to 0
@@ -522,6 +534,8 @@ void CGameApplication::update()
 		CTransformComponent * pTransform2=m_pGameObjectManager->findGameObject("Asteroid")->getTransform();
 		if(CInput::getInstance().getMouse()->getRelativeMouseX()<=pTransform2->getPosition().x+2.5f && CInput::getInstance().getMouse()->getRelativeMouseX()>=pTransform2->getPosition().x-6.5f)
 		{
+			CAudioSourceComponent * pExplode=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("Asteroid")->getComponent("AudioSourceComponent");
+			pExplode->play();
 			pTransform2->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
 		}
 	}
@@ -597,6 +611,8 @@ void CGameApplication::update()
 				//if the player passes through the gate then move it forward to a random position and increase the score depending on their speed
 				pTransform2->setPosition(random,random2,random3);
 				score=score+speed;
+				CAudioSourceComponent * pSmash=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("Sky")->getComponent("AudioSourceComponent");
+				pSmash->play();
 				}
 			}
 		}
@@ -617,7 +633,8 @@ void CGameApplication::update()
 					float rotX = RandomFloat (-1,1);
 					float rotY = RandomFloat (-1,1);
 					float rotZ = RandomFloat (-1,1);
-
+					CAudioSourceComponent * pBlarg=(CAudioSourceComponent *)m_pGameObjectManager->findGameObject("Earth")->getComponent("AudioSourceComponent");
+					pBlarg->play();
 					pTransform3->setPosition(pTransform->getPosition().x,pTransform->getPosition().y,pTransform->getPosition().z+300.0f);
 					pTransform->rotate(rotX,rotY,rotZ);
 					pTransform->translate(rotX*5,rotY*5,rotZ*5);
