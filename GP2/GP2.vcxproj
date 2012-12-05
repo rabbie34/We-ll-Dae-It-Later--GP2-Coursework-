@@ -50,7 +50,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(FMODSDK_DIR)\inc;$(FBXSDK_DIR)\include;$(DXSDK_DIR)\include;$(ROCKETSDK_DIR)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(HAVOKSDK_DIR)\source;$(FMODSDK_DIR)\inc;$(FBXSDK_DIR)\include;$(DXSDK_DIR)\include;$(ROCKETSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -77,6 +77,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioListenerComponent.cpp" />
+    <ClCompile Include="AudioSourceComponent.cpp" />
+    <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="DirectionalLightComponent.cpp" />
     <ClCompile Include="GameApplication.cpp" />
@@ -99,6 +102,9 @@
     <ClCompile Include="Win32Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioListenerComponent.h" />
+    <ClInclude Include="AudioSourceComponent.h" />
+    <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="D3D10Effect.h" />
     <ClInclude Include="DefaultEffect.h" />

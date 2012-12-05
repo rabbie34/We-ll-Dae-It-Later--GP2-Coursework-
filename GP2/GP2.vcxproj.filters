@@ -55,6 +55,9 @@
     <Filter Include="GUI Files">
       <UniqueIdentifier>{e2c3bb56-e6a0-4694-89ac-48f0f1507f6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{1feabf9f-c139-49f8-9cb5-214ec831c0a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -116,6 +119,15 @@
     </ClCompile>
     <ClCompile Include="RenderInterfaceDirectx10.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSystem.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioListenerComponent.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioSourceComponent.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +202,15 @@
     </ClInclude>
     <ClInclude Include="RenderInterfaceDirectx10.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSystem.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioListenerComponent.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioSourceComponent.h">
+      <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

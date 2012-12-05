@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include <D3D10.h>
 #include <D3DX10.h>
+#include <ctime>
 
 #include "GameObjectManager.h"
 
@@ -13,6 +14,9 @@
 #include "MeshComponent.h"
 
 #include "ModelLoader.h"
+#include "AudioSourceComponent.h"
+#include "AudioSystem.h"
+#include "AudioListenerComponent.h"
 
 #include "GUIManager.h"
 
@@ -40,6 +44,7 @@ private:
 	bool initGame();
 	bool initGraphics();
 	bool initGUI();
+	bool initAudio();
 	bool initWindow();
 	void render();
 	void update();
@@ -76,4 +81,18 @@ private:
 	GameState m_GameState;
 	//Need one for every screen
 	float m_fCurrentTime;
+	D3DXVECTOR3 shipRot;
+	float speed;
+	float rotSpeed;
+	float audioTimer;
+	int score;
+
+	//Used for generation of a random number between two floats
+	float RandomFloat(float a, float b) 
+	{
+    float random = ((float) rand()) / (float) RAND_MAX;
+    float diff = b - a;
+    float r = random * diff;
+    return a + r;
+	}
 };

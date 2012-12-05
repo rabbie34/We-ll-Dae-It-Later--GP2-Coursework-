@@ -12,6 +12,11 @@ CGameObjectManager::~CGameObjectManager()
 	clear();
 }
 
+void CGameObjectManager::removeGameObject(CGameObject *pObject)
+{
+
+}
+
 //add game object
 void CGameObjectManager::addGameObject(CGameObject * pObject)
 {
