@@ -116,8 +116,8 @@ bool CGameApplication::initGame()
 	m_pGameObjectManager->addGameObject(pTestGameObject);
 	//Sets the ship speed and rotation
 	shipRot = m_pGameObjectManager->findGameObject("player")->getTransform()->getRotation();
-	speed=10.0f;
-	rotSpeed=16.0f;
+	speed=12.0f;
+	rotSpeed=18.0f;
 
 	//Creation of various planets and objects to popluate the scene. Uses the same method as player creation.
 	pTestGameObject=new CGameObject();
@@ -579,16 +579,16 @@ void CGameApplication::update()
 	}
 	else
 	{
-		if(speed>10.0f)
+		if(speed>12.0f)
 		{
 			speed=speed-m_Timer.getElapsedTime()*10.0f;
 			rotSpeed=rotSpeed-m_Timer.getElapsedTime()*10.0f;
 		}
 		//Ensures the speed can not go below its original value.
-		if(speed<10.0f)
+		if(speed<12.0f)
 		{
-			speed=10.0f;
-			rotSpeed=16.0f;
+			speed=12.0f;
+			rotSpeed=18.0f;
 		}
 	}
 
