@@ -128,6 +128,7 @@ bool CGameApplication::initGame()
 	pTestGameObject->setName("Test2");
 	//Position
 	pTestGameObject->getTransform()->setPosition(5.0f,0.0f,10.0f);
+	pTestGameObject->getTransform()->setScale(0.75f,0.75f,0.75f);
 	//create material
 	pMaterial=new CMaterialComponent();
 	pMaterial->SetRenderingDevice(m_pD3D10Device);
@@ -275,49 +276,44 @@ void CGameApplication::update()
 	m_Timer.update();
 
 	CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
+	CTransformComponent * pCar=m_pGameObjectManager->findGameObject("Test2")->getTransform();
 
 	CMouse * mouse = CInput::getInstance().getMouse();
 	//pTransform->rotate(mouse->getRelativeMouseY()*m_Timer.getElapsedTime(),mouse->getRelativeMouseX()*m_Timer.getElapsedTime(),0);
 	
-
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime()*2.5f,0.0f,0.0f);
-		pTransform->translate(0,m_Timer.getElapsedTime()*-5,0);
-	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(m_Timer.getElapsedTime()*-2.5f,0.0f,0.0f);
-		pTransform->translate(0,m_Timer.getElapsedTime()*5,0);
-
-	}
-	if (CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*-2.5f);
-		pTransform->translate(m_Timer.getElapsedTime()*5,0,0);
-	}
-	else if (CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
-	{
-		//play sound
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		pTransform->rotate(0.0f,0.0f,m_Timer.getElapsedTime()*2.5f);
-		pTransform->translate(m_Timer.getElapsedTime()*-5,0,0);
-	}
+	float W = CInput::getInstance().getKeyboard()->isKeyDown((int)'W') * m_Timer.getElapsedTime();
+	float A = CInput::getInstance().getKeyboard()->isKeyDown((int)'A') * m_Timer.getElapsedTime();
+	float S = CInput::getInstance().getKeyboard()->isKeyDown((int)'S') * m_Timer.getElapsedTime();
+	float D = CInput::getInstance().getKeyboard()->isKeyDown((int)'D') * m_Timer.getElapsedTime();
 	
-
-	if (CInput::getInstance().getKeyboard()->isKeyDown(VK_UP))
+	D3DXVECTOR3 Movement = D3DXVECTOR3(D-A,W-S,0);
+	float Magnitude = sqrtf(Movement.x*Movement.x + Movement.y*Movement.y + Movement.z*Movement.z);
+	if (Magnitude != 0)
 	{
-		CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
-		D3DXVECTOR3 forward = pTransform->getForward();
-		pTransform->translate(forward.x* m_Timer.getElapsedTime() * 10,forward.y* m_Timer.getElapsedTime() * 10,forward.z* m_Timer.getElapsedTime() * 10);
+		Movement = D3DXVECTOR3(Movement.x/Magnitude, Movement.y/Magnitude, Movement.z/Magnitude);
 	}
 
+	float Magnitude2 = sqrtf(Movement.x*Movement.x + Movement.y*Movement.y + Movement.z*Movement.z);
+
+	pTransform->translate(Movement.x/1000,Movement.y/1000,Movement.z/100);
+	//pTransform->rotate(Magnitude2/1000,0,0);
+	
+	if(CInput::getInstance().getKeyboard()->isKeyDown((int)'W'))
+	{
+		pCar->translate(0,m_Timer.getElapsedTime(),0);
+	}
+	if(CInput::getInstance().getKeyboard()->isKeyDown((int)'A'))
+	{
+		pCar->translate(-m_Timer.getElapsedTime(),0,0);
+	}
+	if(CInput::getInstance().getKeyboard()->isKeyDown((int)'S'))
+	{
+		pCar->translate(0,-m_Timer.getElapsedTime(),0);
+	}
+	if(CInput::getInstance().getKeyboard()->isKeyDown((int)'D'))
+	{
+		pCar->translate(m_Timer.getElapsedTime(),0,0);
+	}
 	
 	//CTransformComponent * pTransform=m_pGameObjectManager->findGameObject("Test")->getTransform();
 	pTransform->rotate(pTransform->getRotation().x*m_Timer.getElapsedTime()*-5,pTransform->getRotation().y*m_Timer.getElapsedTime()*-5,pTransform->getRotation().z*m_Timer.getElapsedTime()*-5);
